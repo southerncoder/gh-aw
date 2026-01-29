@@ -101,7 +101,7 @@ func TestCopilotEngineFirewallInstallation(t *testing.T) {
 		// Generate the parallel installation step to verify it contains AWF installation
 		parallelStep := generateParallelInstallationStep(config)
 		parallelStepStr := strings.Join(parallelStep, "\n")
-		
+
 		// Verify it passes the default version to the script
 		if !strings.Contains(parallelStepStr, string(constants.DefaultFirewallVersion)) {
 			t.Errorf("Parallel installation step should include default version %s", string(constants.DefaultFirewallVersion))
@@ -152,7 +152,7 @@ func TestCopilotEngineFirewallInstallation(t *testing.T) {
 		// Generate the parallel installation step to verify it contains custom version
 		parallelStep := generateParallelInstallationStep(config)
 		parallelStepStr := strings.Join(parallelStep, "\n")
-		
+
 		// Verify it passes the custom version to the script
 		if !strings.Contains(parallelStepStr, customVersion) {
 			t.Errorf("Parallel installation step should include custom version %s", customVersion)

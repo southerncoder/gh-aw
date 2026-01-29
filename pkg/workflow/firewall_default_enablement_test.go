@@ -200,7 +200,7 @@ func TestCopilotFirewallDefaultIntegration(t *testing.T) {
 		// Generate the parallel installation step to verify it contains AWF
 		parallelStep := generateParallelInstallationStep(config)
 		parallelStepStr := strings.Join(parallelStep, "\n")
-		
+
 		if !strings.Contains(parallelStepStr, "--awf") || !strings.Contains(parallelStepStr, "install_parallel_setup.sh") {
 			t.Error("Expected AWF installation to be included in parallel installation step")
 		}

@@ -72,7 +72,7 @@ func generateParallelInstallationStep(config ParallelInstallConfig) GitHubAction
 		var dockerArgs strings.Builder
 		dockerArgs.WriteString("            --docker")
 		for _, image := range config.DockerImages {
-			dockerArgs.WriteString(fmt.Sprintf(" %s", image))
+			fmt.Fprintf(&dockerArgs, " %s", image)
 		}
 		stepLines = append(stepLines, dockerArgs.String())
 	} else {
@@ -142,7 +142,8 @@ func GetParallelInstallConfig(workflowData *WorkflowData, engine CodingAgentEngi
 
 	// Get CLI version based on engine
 	engineID := engine.GetID()
-	if engineID == "copilot" {
+	switch engineID {
+	case "copilot":
 		version := string(constants.DefaultCopilotVersion)
 		if workflowData.EngineConfig != nil && workflowData.EngineConfig.Version != "" {
 			version = workflowData.EngineConfig.Version
@@ -151,7 +152,7 @@ func GetParallelInstallConfig(workflowData *WorkflowData, engine CodingAgentEngi
 		if !isSRTEnabled(workflowData) {
 			config.CopilotVersion = version
 		}
-	} else if engineID == "claude" {
+	case "claude":
 		version := string(constants.DefaultClaudeCodeVersion)
 		if workflowData.EngineConfig != nil && workflowData.EngineConfig.Version != "" {
 			version = workflowData.EngineConfig.Version

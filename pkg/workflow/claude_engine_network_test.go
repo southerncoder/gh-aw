@@ -204,21 +204,40 @@ func TestNetworkPermissionsIntegration(t *testing.T) {
 			Firewall: &FirewallConfig{Enabled: true},
 		}
 
-		// Get installation steps
-		steps := engine.GetInstallationSteps(&WorkflowData{EngineConfig: config, NetworkPermissions: networkPermissions})
-		// With AWF enabled: secret validation + Node.js setup + AWF install + Claude install
-		if len(steps) != 4 {
-			t.Fatalf("Expected 4 installation steps (secret validation + Node.js setup + AWF install + Claude install), got %d", len(steps))
+		workflowData := &WorkflowData{
+			EngineConfig:       config,
+			NetworkPermissions: networkPermissions,
 		}
 
-		// Verify AWF installation step (third step, index 2)
-		awfStep := strings.Join(steps[2], "\n")
-		if !strings.Contains(awfStep, "Install awf binary") {
-			t.Error("Third step should install AWF binary")
+		// Get installation steps
+		steps := engine.GetInstallationSteps(workflowData)
+		// With AWF enabled (using parallel installation): secret validation + Node.js setup
+		// AWF and Claude CLI installation are deferred to parallel installation step
+		if len(steps) != 2 {
+			t.Fatalf("Expected 2 installation steps (secret validation + Node.js setup), got %d", len(steps))
+		}
+
+		// Verify that AWF installation is NOT in engine installation steps
+		for _, step := range steps {
+			stepStr := strings.Join(step, "\n")
+			if strings.Contains(stepStr, "Install awf binary") {
+				t.Error("AWF installation should be deferred to parallel installation step")
+			}
+		}
+
+		// Verify that parallel installation should be used
+		if !ShouldUseParallelInstallation(workflowData, engine) {
+			t.Error("Parallel installation should be enabled with firewall and Claude engine")
+		}
+
+		// Verify parallel installation config includes AWF
+		parallelConfig := GetParallelInstallConfig(workflowData, engine)
+		if parallelConfig.AWFVersion == "" {
+			t.Error("Parallel installation config should include AWF version")
 		}
 
 		// Get execution steps
-		execSteps := engine.GetExecutionSteps(&WorkflowData{Name: "test-workflow", EngineConfig: config, NetworkPermissions: networkPermissions}, "test-log")
+		execSteps := engine.GetExecutionSteps(workflowData, "test-log")
 		if len(execSteps) == 0 {
 			t.Fatal("Expected at least one execution step")
 		}
