@@ -60,7 +60,7 @@ func TestAWFInstallationStepDefaultVersion(t *testing.T) {
 	})
 }
 
-// TestCopilotEngineFirewallInstallation verifies that Copilot engine includes AWF installation when firewall is enabled
+// TestCopilotEngineFirewallInstallation verifies that Copilot engine uses parallel installation when firewall is enabled
 func TestCopilotEngineFirewallInstallation(t *testing.T) {
 	t.Run("includes AWF installation step when firewall enabled", func(t *testing.T) {
 		engine := NewCopilotEngine()
@@ -78,33 +78,41 @@ func TestCopilotEngineFirewallInstallation(t *testing.T) {
 
 		steps := engine.GetInstallationSteps(workflowData)
 
-		// Find the AWF installation step
-		var foundAWFStep bool
-		var awfStepStr string
+		// AWF installation should NOT be in engine installation steps anymore
+		// It's deferred to parallel installation step
 		for _, step := range steps {
 			stepStr := strings.Join(step, "\n")
 			if strings.Contains(stepStr, "Install awf binary") {
-				foundAWFStep = true
-				awfStepStr = stepStr
-				break
+				t.Error("AWF installation should be deferred to parallel installation step")
 			}
 		}
 
-		if !foundAWFStep {
-			t.Fatal("Expected to find AWF installation step when firewall is enabled")
+		// Verify that parallel installation should be used
+		if !ShouldUseParallelInstallation(workflowData, engine) {
+			t.Error("Parallel installation should be enabled with firewall and Copilot engine")
 		}
 
+		// Verify parallel installation config includes AWF with default version
+		config := GetParallelInstallConfig(workflowData, engine)
+		if config.AWFVersion != string(constants.DefaultFirewallVersion) {
+			t.Errorf("Expected AWF version %s, got %s", string(constants.DefaultFirewallVersion), config.AWFVersion)
+		}
+
+		// Generate the parallel installation step to verify it contains AWF installation
+		parallelStep := generateParallelInstallationStep(config)
+		parallelStepStr := strings.Join(parallelStep, "\n")
+		
 		// Verify it passes the default version to the script
-		if !strings.Contains(awfStepStr, string(constants.DefaultFirewallVersion)) {
-			t.Errorf("AWF installation step should pass default version %s to script", string(constants.DefaultFirewallVersion))
+		if !strings.Contains(parallelStepStr, string(constants.DefaultFirewallVersion)) {
+			t.Errorf("Parallel installation step should include default version %s", string(constants.DefaultFirewallVersion))
 		}
-		// Verify it calls the install_awf_binary.sh script
-		if !strings.Contains(awfStepStr, "install_awf_binary.sh") {
-			t.Error("AWF installation should call install_awf_binary.sh script")
+		// Verify it calls the install_parallel_setup.sh script
+		if !strings.Contains(parallelStepStr, "install_parallel_setup.sh") {
+			t.Error("Parallel installation should call install_parallel_setup.sh script")
 		}
-		// Verify it's NOT using the old unverified installer script pattern
-		if strings.Contains(awfStepStr, "raw.githubusercontent.com") {
-			t.Error("AWF installation should NOT download from raw.githubusercontent.com")
+		// Verify it includes --awf flag
+		if !strings.Contains(parallelStepStr, "--awf") {
+			t.Error("Parallel installation should include --awf flag")
 		}
 	})
 
@@ -126,35 +134,33 @@ func TestCopilotEngineFirewallInstallation(t *testing.T) {
 
 		steps := engine.GetInstallationSteps(workflowData)
 
-		// Find the AWF installation step
-		var foundAWFStep bool
-		var awfStepStr string
+		// AWF installation should NOT be in engine installation steps anymore
+		// It's deferred to parallel installation step
 		for _, step := range steps {
 			stepStr := strings.Join(step, "\n")
 			if strings.Contains(stepStr, "Install awf binary") {
-				foundAWFStep = true
-				awfStepStr = stepStr
-				break
+				t.Error("AWF installation should be deferred to parallel installation step")
 			}
 		}
 
-		if !foundAWFStep {
-			t.Fatal("Expected to find AWF installation step when firewall is enabled")
+		// Verify parallel installation config includes AWF with custom version
+		config := GetParallelInstallConfig(workflowData, engine)
+		if config.AWFVersion != customVersion {
+			t.Errorf("Expected AWF version %s, got %s", customVersion, config.AWFVersion)
 		}
 
+		// Generate the parallel installation step to verify it contains custom version
+		parallelStep := generateParallelInstallationStep(config)
+		parallelStepStr := strings.Join(parallelStep, "\n")
+		
 		// Verify it passes the custom version to the script
-		if !strings.Contains(awfStepStr, customVersion) {
-			t.Errorf("AWF installation step should pass custom version %s to script", customVersion)
+		if !strings.Contains(parallelStepStr, customVersion) {
+			t.Errorf("Parallel installation step should include custom version %s", customVersion)
 		}
 
-		// Verify it calls the install_awf_binary.sh script
-		if !strings.Contains(awfStepStr, "install_awf_binary.sh") {
-			t.Error("AWF installation should call install_awf_binary.sh script")
-		}
-
-		// Verify it's NOT using the old unverified installer script pattern
-		if strings.Contains(awfStepStr, "raw.githubusercontent.com") {
-			t.Error("AWF installation should NOT download from raw.githubusercontent.com")
+		// Verify it calls the install_parallel_setup.sh script
+		if !strings.Contains(parallelStepStr, "install_parallel_setup.sh") {
+			t.Error("Parallel installation should call install_parallel_setup.sh script")
 		}
 	})
 

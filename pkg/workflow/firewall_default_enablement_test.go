@@ -177,18 +177,32 @@ func TestCopilotFirewallDefaultIntegration(t *testing.T) {
 		engine := NewCopilotEngine()
 		steps := engine.GetInstallationSteps(workflowData)
 
-		// Verify AWF installation step is present
-		found := false
+		// AWF installation should NOT be in engine installation steps
+		// It's deferred to parallel installation step
 		for _, step := range steps {
 			stepStr := strings.Join(step, "\n")
-			if strings.Contains(stepStr, "Install awf binary") || strings.Contains(stepStr, "awf --version") {
-				found = true
-				break
+			if strings.Contains(stepStr, "Install awf binary") {
+				t.Error("AWF installation should be deferred to parallel installation step")
 			}
 		}
 
-		if !found {
-			t.Error("Expected AWF installation steps to be included")
+		// Verify that parallel installation should be used
+		if !ShouldUseParallelInstallation(workflowData, engine) {
+			t.Error("Parallel installation should be enabled with network restrictions and Copilot engine")
+		}
+
+		// Verify parallel installation config includes AWF
+		config := GetParallelInstallConfig(workflowData, engine)
+		if config.AWFVersion == "" {
+			t.Error("Parallel installation config should include AWF version")
+		}
+
+		// Generate the parallel installation step to verify it contains AWF
+		parallelStep := generateParallelInstallationStep(config)
+		parallelStepStr := strings.Join(parallelStep, "\n")
+		
+		if !strings.Contains(parallelStepStr, "--awf") || !strings.Contains(parallelStepStr, "install_parallel_setup.sh") {
+			t.Error("Expected AWF installation to be included in parallel installation step")
 		}
 	})
 
