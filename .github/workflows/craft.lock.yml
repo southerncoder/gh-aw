@@ -1312,8 +1312,8 @@ jobs:
 
   pre_activation:
     if: >
-      ((github.event_name != 'schedule') && (github.event_name != 'merge_group')) && ((github.event_name == 'issues') &&
-      (contains(github.event.issue.body, '/craft')))
+      (((github.event_name != 'schedule') && (github.event_name != 'merge_group')) && (github.event_name != 'workflow_dispatch')) &&
+      ((github.event_name == 'issues') && (contains(github.event.issue.body, '/craft')))
     runs-on: ubuntu-slim
     permissions:
       contents: read

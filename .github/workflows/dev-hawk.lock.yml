@@ -1261,7 +1261,8 @@ jobs:
 
   pre_activation:
     if: >
-      ((github.event_name != 'schedule') && (github.event_name != 'merge_group')) && (${{ github.event.workflow_run.event == 'workflow_dispatch' }})
+      (((github.event_name != 'schedule') && (github.event_name != 'merge_group')) && (github.event_name != 'workflow_dispatch')) &&
+      (${{ github.event.workflow_run.event == 'workflow_dispatch' }})
     runs-on: ubuntu-slim
     permissions:
       contents: read

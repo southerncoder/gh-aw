@@ -164,6 +164,115 @@ This workflow runs in the merge queue.
 			"pre_activation should skip for merge_group events")
 	})
 
+	t.Run("workflow_dispatch_with_default_roles_skips_pre_activation", func(t *testing.T) {
+		// Workflows with workflow_dispatch and default roles (which include "write")
+		// should skip pre_activation because check_membership.cjs short-circuits
+		// for workflow_dispatch when write is in the allowed roles
+		workflowContent := `---
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened]
+engine: codex
+---
+
+# Workflow Dispatch with Default Roles
+
+This workflow uses default roles which include "write".
+`
+		workflowFile := filepath.Join(tmpDir, "workflow-dispatch-default-roles.md")
+		require.NoError(t, os.WriteFile(workflowFile, []byte(workflowContent), 0644))
+
+		err := compiler.CompileWorkflow(workflowFile)
+		require.NoError(t, err, "Should compile workflow")
+
+		lockFile := stringutil.MarkdownToLockFile(workflowFile)
+		lockContent, err := os.ReadFile(lockFile)
+		require.NoError(t, err, "Should read lock file")
+		lockContentStr := string(lockContent)
+
+		// Verify pre_activation has skip condition for workflow_dispatch
+		preActivationSection := extractJobSectionForSkipTest(lockContentStr, string(constants.PreActivationJobName))
+		require.NotEmpty(t, preActivationSection, "Should have pre_activation job")
+		assert.Contains(t, preActivationSection, "github.event_name != 'workflow_dispatch'",
+			"pre_activation should skip for workflow_dispatch when roles include write")
+		assert.Contains(t, preActivationSection, "github.event_name != 'schedule'",
+			"pre_activation should also skip for schedule events")
+	})
+
+	t.Run("workflow_dispatch_with_custom_roles_without_write_does_not_skip", func(t *testing.T) {
+		// Workflows with workflow_dispatch and custom roles that DON'T include "write"
+		// should NOT skip pre_activation for workflow_dispatch because permission check is needed
+		workflowContent := `---
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened]
+roles: [admin]
+engine: codex
+---
+
+# Workflow Dispatch with Admin-Only Roles
+
+This workflow only allows admins, not write access.
+`
+		workflowFile := filepath.Join(tmpDir, "workflow-dispatch-admin-only.md")
+		require.NoError(t, os.WriteFile(workflowFile, []byte(workflowContent), 0644))
+
+		err := compiler.CompileWorkflow(workflowFile)
+		require.NoError(t, err, "Should compile workflow")
+
+		lockFile := stringutil.MarkdownToLockFile(workflowFile)
+		lockContent, err := os.ReadFile(lockFile)
+		require.NoError(t, err, "Should read lock file")
+		lockContentStr := string(lockContent)
+
+		// Verify pre_activation does NOT have skip condition for workflow_dispatch
+		preActivationSection := extractJobSectionForSkipTest(lockContentStr, string(constants.PreActivationJobName))
+		require.NotEmpty(t, preActivationSection, "Should have pre_activation job")
+		assert.NotContains(t, preActivationSection, "github.event_name != 'workflow_dispatch'",
+			"pre_activation should NOT skip for workflow_dispatch when roles don't include write")
+		// But should still skip for schedule and merge_group
+		assert.Contains(t, preActivationSection, "github.event_name != 'schedule'",
+			"pre_activation should still skip for schedule events")
+		assert.Contains(t, preActivationSection, "github.event_name != 'merge_group'",
+			"pre_activation should still skip for merge_group events")
+	})
+
+	t.Run("workflow_dispatch_with_roles_all_has_no_pre_activation", func(t *testing.T) {
+		// Workflows with roles: all don't need permission checks at all
+		// so they don't get a pre_activation job (when there's no stop-time etc.)
+		workflowContent := `---
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened]
+roles: all
+engine: codex
+---
+
+# Workflow Dispatch with Roles All
+
+This workflow allows all users.
+`
+		workflowFile := filepath.Join(tmpDir, "workflow-dispatch-roles-all.md")
+		require.NoError(t, os.WriteFile(workflowFile, []byte(workflowContent), 0644))
+
+		err := compiler.CompileWorkflow(workflowFile)
+		require.NoError(t, err, "Should compile workflow")
+
+		lockFile := stringutil.MarkdownToLockFile(workflowFile)
+		lockContent, err := os.ReadFile(lockFile)
+		require.NoError(t, err, "Should read lock file")
+		lockContentStr := string(lockContent)
+
+		// With roles: all, no permission check is needed at all
+		// So there should be NO pre_activation job
+		preActivationSection := extractJobSectionForSkipTest(lockContentStr, string(constants.PreActivationJobName))
+		assert.Empty(t, preActivationSection,
+			"Workflow with roles: all should NOT have pre_activation job (no permission check needed)")
+	})
+
 	t.Run("workflow_with_stop_time_does_not_skip_pre_activation", func(t *testing.T) {
 		// Workflows with stop-after should ALWAYS run pre_activation
 		// even for schedule events, because the stop-time check must run
