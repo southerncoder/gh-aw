@@ -41,7 +41,7 @@ jobs:
   activation:
     needs: pre_activation
     if: >
-      ((needs.pre_activation.result == 'skipped') || (needs.pre_activation.outputs.activated == 'true')) &&
+      ((!cancelled()) && ((!(needs.pre_activation.result)) || (needs.pre_activation.outputs.activated == 'true'))) &&
       (startsWith(github.event.issue.title, '[Workflow]'))
     runs-on: ubuntu-slim
     permissions:

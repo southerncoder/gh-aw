@@ -51,7 +51,7 @@ jobs:
   activation:
     needs: pre_activation
     if: >
-      ((needs.pre_activation.result == 'skipped') || (needs.pre_activation.outputs.activated == 'true')) &&
+      ((!cancelled()) && ((!(needs.pre_activation.result)) || (needs.pre_activation.outputs.activated == 'true'))) &&
       ((github.event_name == 'issues') && (contains(github.event.issue.body, '/archie')) || (github.event_name == 'issue_comment') &&
       ((contains(github.event.comment.body, '/archie')) && (github.event.issue.pull_request == null)) ||
       (github.event_name == 'issue_comment') &&

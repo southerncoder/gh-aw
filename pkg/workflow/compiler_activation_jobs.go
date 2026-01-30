@@ -567,10 +567,14 @@ func (c *Compiler) buildActivationJob(data *WorkflowData, preActivationJobCreate
 		// Build activation condition:
 		// - If pre_activation was skipped (safe event like schedule/merge_group), proceed
 		// - Otherwise, check that pre_activation.outputs.activated == 'true'
-		preActivationSkipped := BuildEquals(
-			BuildPropertyAccess(fmt.Sprintf("needs.%s.result", string(constants.PreActivationJobName))),
-			BuildStringLiteral("skipped"),
-		)
+		//
+		// IMPORTANT: When a job's `if` condition evaluates to false, the job is skipped but
+		// `needs.<job>.result` is NOT set to 'skipped' - it's empty/undefined. We use the
+		// negation `!needs.pre_activation.result` to check if the job didn't run at all,
+		// which covers both cases where it was skipped due to `if: false` or other reasons.
+		preActivationSkipped := &NotNode{
+			Child: BuildPropertyAccess(fmt.Sprintf("needs.%s.result", string(constants.PreActivationJobName))),
+		}
 		preActivationActivated := BuildEquals(
 			BuildPropertyAccess(fmt.Sprintf("needs.%s.outputs.%s", string(constants.PreActivationJobName), constants.ActivatedOutput)),
 			BuildStringLiteral("true"),
@@ -578,22 +582,29 @@ func (c *Compiler) buildActivationJob(data *WorkflowData, preActivationJobCreate
 		// (pre_activation was skipped) OR (pre_activation.outputs.activated == 'true')
 		activatedExpr := BuildOr(preActivationSkipped, preActivationActivated)
 
+		// IMPORTANT: We must use !cancelled() to ensure this job runs even when pre_activation is skipped.
+		// Without !cancelled(), GitHub Actions skips dependent jobs when their dependencies are skipped,
+		// BEFORE evaluating the job's if condition.
+		// Reference: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds
+		notCancelled := &NotNode{Child: BuildFunctionCall("cancelled")}
+
 		// If there are custom jobs before activation and the if condition references them,
 		// include that condition in the activation job's if clause
 		if data.If != "" && c.referencesCustomJobOutputs(data.If, data.Jobs) && len(customJobsBeforeActivation) > 0 {
 			// Include the custom job output condition in the activation job
 			unwrappedIf := stripExpressionWrapper(data.If)
 			ifExpr := &ExpressionNode{Expression: unwrappedIf}
-			combinedExpr := BuildAnd(activatedExpr, ifExpr)
+			combinedExpr := BuildAnd(BuildAnd(notCancelled, activatedExpr), ifExpr)
 			activationCondition = combinedExpr.Render()
 		} else if data.If != "" && !c.referencesCustomJobOutputs(data.If, data.Jobs) {
 			// Include user's if condition that doesn't reference custom jobs
 			unwrappedIf := stripExpressionWrapper(data.If)
 			ifExpr := &ExpressionNode{Expression: unwrappedIf}
-			combinedExpr := BuildAnd(activatedExpr, ifExpr)
+			combinedExpr := BuildAnd(BuildAnd(notCancelled, activatedExpr), ifExpr)
 			activationCondition = combinedExpr.Render()
 		} else {
-			activationCondition = activatedExpr.Render()
+			combinedExpr := BuildAnd(notCancelled, activatedExpr)
+			activationCondition = combinedExpr.Render()
 		}
 	} else {
 		// No pre-activation check needed

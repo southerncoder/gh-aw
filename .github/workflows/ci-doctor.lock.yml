@@ -50,7 +50,7 @@ jobs:
     needs: pre_activation
     # zizmor: ignore[dangerous-triggers] - workflow_run trigger is secured with role and fork validation
     if: >
-      (((needs.pre_activation.result == 'skipped') || (needs.pre_activation.outputs.activated == 'true')) &&
+      (((!cancelled()) && ((!(needs.pre_activation.result)) || (needs.pre_activation.outputs.activated == 'true'))) &&
       (github.event.workflow_run.conclusion == 'failure')) && ((github.event_name != 'workflow_run') ||
       ((github.event.workflow_run.repository.id == github.repository_id) &&
       (!(github.event.workflow_run.repository.fork))))

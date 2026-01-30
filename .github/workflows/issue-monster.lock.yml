@@ -47,7 +47,7 @@ jobs:
       - pre_activation
       - search_issues
     if: >
-      ((needs.pre_activation.result == 'skipped') || (needs.pre_activation.outputs.activated == 'true')) &&
+      ((!cancelled()) && ((!(needs.pre_activation.result)) || (needs.pre_activation.outputs.activated == 'true'))) &&
       (needs.search_issues.outputs.has_issues == 'true')
     runs-on: ubuntu-slim
     permissions:
