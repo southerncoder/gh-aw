@@ -2,16 +2,16 @@
 
 ## Executive Summary
 
-Analysis of 15 workflows exceeding 100 KB identified **safe-inputs configuration** as the primary size contributor, accounting for **70-80% of workflow size** in smoke tests. This bloat is **architectural and intentional** for security reasons - scripts are embedded directly in YAML rather than loaded from files to ensure they cannot be modified during execution.
+Analysis of 15 workflows exceeding 100 KB identified **safe-inputs configuration** as the primary size contributor, accounting for **70-80% of workflow size** in smoke tests. This size overhead is **architectural and intentional** for security reasons - scripts are embedded directly in YAML rather than loaded from files to ensure they cannot be modified during execution.
 
 ## Key Findings
 
 ### Size Contributors by Priority
 
-1. **Safe-Inputs Tool Scripts (HIGH IMPACT)** - 70-80% of workflow size
-   - **Root cause**: Shell/JavaScript/Python scripts embedded as heredocs in YAML
-   - **Example**: `github-queries-safe-input.md` (16KB source) → 83KB compiled
-   - **Affected**: 6 workflows (all 3 smoke tests + 3 daily reports)
+1. **Safe-Inputs Tool Scripts (HIGH IMPACT)** - 70-80% of workflow size (smoke tests)
+   - **Root cause**: Shell/JavaScript/Python scripts embedded as heredocs (a shell scripting technique for multi-line string literals) in YAML
+   - **Example**: `github-queries-safe-input.md` (16KB source) → 83KB compiled (74% of smoke-claude's 112KB total)
+   - **Affected**: 6 workflows (all 3 smoke tests at 70-74% + 3 daily reports with safe-inputs)
    - **Status**: **Architectural - Intentional for security**
 
 2. **Large Analysis Prompts (JUSTIFIED)** - 30-55% of workflow size
@@ -238,4 +238,4 @@ The 15 oversized workflows fall into two categories:
 - ✅ Size reduction guidelines documented
 - ⚠️ Optimization implementation: 1 high-value optimization identified
 
-**Recommendation**: Implement Priority 1 (modularize github-queries-safe-input.md) to optimize 6 workflows and prevent future bloat. Document remaining workflows as having justified size.
+**Recommendation**: Implement Priority 1 (modularize github-queries-safe-input.md) to optimize 6 workflows and prevent future overhead. Add a section to workflow documentation noting that the remaining 9 workflows (copilot-session-insights, copilot-pr-nlp-analysis, security-alert-burndown, poem-bot, python-data-charts, and 4 daily reports without safe-inputs) have justified sizes due to complex analysis requirements.
