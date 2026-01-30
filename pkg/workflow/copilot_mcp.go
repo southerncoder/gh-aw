@@ -37,8 +37,8 @@ func (e *CopilotEngine) RenderMCPConfig(yaml *strings.Builder, tools map[string]
 }
 
 // RenderMCPConfigWithoutGateway generates MCP server configuration for Copilot CLI
-// without starting the MCP gateway. This is used when sandbox is disabled and
-// MCP servers should be configured as local stdio processes.
+// without the MCP gateway proxy. This is used when sandbox is disabled and
+// MCP servers run in their configured mode (stdio, Docker, or HTTP) and communicate directly with the agent.
 func (e *CopilotEngine) RenderMCPConfigWithoutGateway(yaml *strings.Builder, tools map[string]any, mcpTools []string, workflowData *WorkflowData) {
 	copilotMCPLog.Printf("Rendering MCP config without gateway for Copilot engine: mcpTools=%d", len(mcpTools))
 

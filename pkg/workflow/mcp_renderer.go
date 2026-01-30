@@ -526,7 +526,7 @@ type JSONMCPConfigOptions struct {
 	GatewayConfig *MCPGatewayRuntimeConfig
 	// SkipGatewayStartup when true, writes the MCP config file directly instead of
 	// piping to start_mcp_gateway.sh. This is used when sandbox is disabled and
-	// MCP servers should run as local stdio processes without the gateway.
+	// MCP servers run in their configured mode (stdio, Docker, or HTTP) without the gateway proxy.
 	SkipGatewayStartup bool
 }
 
@@ -841,7 +841,7 @@ func RenderJSONMCPConfig(
 	// Write the configuration to the YAML output
 	if options.SkipGatewayStartup {
 		// When sandbox is disabled, write the MCP config file directly without starting the gateway
-		// MCP servers will be configured as local stdio processes
+		// MCP servers run in their configured mode (stdio, Docker, or HTTP) without the gateway proxy
 		fmt.Fprintf(yaml, "          cat > %s << 'MCPCONFIG_EOF'\n", options.ConfigPath)
 		yaml.WriteString(generatedConfig)
 		yaml.WriteString("          MCPCONFIG_EOF\n")

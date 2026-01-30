@@ -660,6 +660,7 @@ func (c *Compiler) generateMCPSetup(yaml *strings.Builder, tools map[string]any,
 		// Generate MCP config directly without starting the gateway
 		mcpSetupGeneratorLog.Print("Sandbox disabled with MCP tools - generating MCP config without gateway")
 
+		// Create necessary directories before rendering config
 		yaml.WriteString("      - name: Write MCP configuration\n")
 		yaml.WriteString("        id: write-mcp-config\n")
 
@@ -680,6 +681,8 @@ func (c *Compiler) generateMCPSetup(yaml *strings.Builder, tools map[string]any,
 
 		yaml.WriteString("        run: |\n")
 		yaml.WriteString("          set -eo pipefail\n")
+		// Create directories that may be needed by different engines
+		yaml.WriteString("          mkdir -p /tmp/gh-aw/mcp-config\n")
 
 		// Render MCP config with SkipGatewayStartup=true
 		// Use type assertion to check if engine supports RenderMCPConfigWithoutGateway
@@ -689,9 +692,11 @@ func (c *Compiler) generateMCPSetup(yaml *strings.Builder, tools map[string]any,
 		if ngr, ok := engine.(noGatewayRenderer); ok {
 			ngr.RenderMCPConfigWithoutGateway(yaml, tools, mcpTools, workflowData)
 		} else {
-			// Fallback: use RenderMCPConfig with sandbox disabled
-			// The gateway config will be nil and SkipGatewayStartup behavior depends on renderer
-			mcpSetupGeneratorLog.Print("Engine does not support RenderMCPConfigWithoutGateway, using RenderMCPConfig")
+			// Fallback warning: sandbox-disabled MCP config is not fully supported for this engine
+			// The engine's RenderMCPConfig may pipe to start_mcp_gateway.sh which will fail
+			// Currently only Copilot engine fully supports sandbox-disabled with MCP tools
+			mcpSetupGeneratorLog.Printf("WARNING: Engine %s does not support RenderMCPConfigWithoutGateway - MCP config generation may not work correctly with sandbox disabled", engine.GetID())
+			// Still attempt to render - the gateway script will exit cleanly if config is empty
 			engine.RenderMCPConfig(yaml, tools, mcpTools, workflowData)
 		}
 	}
