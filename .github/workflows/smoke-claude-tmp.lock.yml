@@ -1,22 +1,9 @@
 
 name: "AAA Smoke Claude"
 "on":
-  pull_request:
-    # names: # Label filtering applied via job conditions
-    # - smoke # Label filtering applied via job conditions
-    types:
-    - labeled
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch: null
 
 permissions: {}
-
-concurrency:
-  group: "gh-aw-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
-  cancel-in-progress: true
-
-run-name: "AAA Smoke Claude Temp"
 
 jobs:
   pre_activation:
@@ -36,7 +23,7 @@ jobs:
     runs-on: ubuntu-slim
     steps:
         - run: |
-            echo "activation"
+            echo "activation, needs.pre_activation.result=${{ needs.pre_activation.result }}"
 
   agent:
     needs: ["pre_activation", "activation"]
