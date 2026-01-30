@@ -532,6 +532,84 @@ func TestSemanticTypeAliases(t *testing.T) {
 			t.Errorf("CustomEngine = %q, want %q", custom, "custom")
 		}
 	})
+
+	// Test FilePath type
+	t.Run("FilePath type", func(t *testing.T) {
+		var testPath FilePath = "/tmp/test/file.txt"
+		if string(testPath) != "/tmp/test/file.txt" {
+			t.Errorf("FilePath conversion failed: got %q, want %q", testPath, "/tmp/test/file.txt")
+		}
+
+		// Test PromptFilePath has the correct type
+		promptPath := PromptFilePath
+		if string(promptPath) != "/tmp/gh-aw/aw-prompts/prompt.txt" {
+			t.Errorf("PromptFilePath = %q, want %q", promptPath, "/tmp/gh-aw/aw-prompts/prompt.txt")
+		}
+
+		// Test IsValid
+		if !testPath.IsValid() {
+			t.Error("FilePath should be valid when non-empty")
+		}
+
+		var emptyPath FilePath = ""
+		if emptyPath.IsValid() {
+			t.Error("FilePath should be invalid when empty")
+		}
+
+		// Test String method
+		if testPath.String() != "/tmp/test/file.txt" {
+			t.Errorf("FilePath.String() = %q, want %q", testPath.String(), "/tmp/test/file.txt")
+		}
+	})
+
+	// Test ByteSize type
+	t.Run("ByteSize type", func(t *testing.T) {
+		var testSize ByteSize = 1024
+		if int(testSize) != 1024 {
+			t.Errorf("ByteSize conversion failed: got %d, want %d", testSize, 1024)
+		}
+
+		// Test size constants have the correct type
+		maxPatchSize := DefaultMaxPatchSize
+		if int(maxPatchSize) != 1024 {
+			t.Errorf("DefaultMaxPatchSize = %d, want %d", maxPatchSize, 1024)
+		}
+
+		yamlBuilderSize := DefaultYAMLBuilderSize
+		if int(yamlBuilderSize) != 256*1024 {
+			t.Errorf("DefaultYAMLBuilderSize = %d, want %d", yamlBuilderSize, 256*1024)
+		}
+
+		maxChunkSize := MaxChunkSize
+		if int(maxChunkSize) != 20900 {
+			t.Errorf("MaxChunkSize = %d, want %d", maxChunkSize, 20900)
+		}
+
+		chunkBuffer := ChunkSizeBuffer
+		if int(chunkBuffer) != 100 {
+			t.Errorf("ChunkSizeBuffer = %d, want %d", chunkBuffer, 100)
+		}
+
+		// Test IsValid
+		if !testSize.IsValid() {
+			t.Error("ByteSize should be valid when non-negative")
+		}
+
+		var zeroSize ByteSize = 0
+		if !zeroSize.IsValid() {
+			t.Error("ByteSize should be valid when zero")
+		}
+
+		var negativeSize ByteSize = -1
+		if negativeSize.IsValid() {
+			t.Error("ByteSize should be invalid when negative")
+		}
+
+		// Test String method
+		if testSize.String() != "1024" {
+			t.Errorf("ByteSize.String() = %q, want %q", testSize.String(), "1024")
+		}
+	})
 }
 
 func TestTypeSafetyBetweenSemanticTypes(t *testing.T) {

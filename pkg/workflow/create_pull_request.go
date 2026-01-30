@@ -87,7 +87,7 @@ func (c *Compiler) buildCreateOutputPullRequestJob(data *WorkflowData, mainJobNa
 	customEnvVars = append(customEnvVars, fmt.Sprintf("          GH_AW_PR_AUTO_MERGE: %q\n", fmt.Sprintf("%t", data.SafeOutputs.CreatePullRequests.AutoMerge)))
 
 	// Pass the maximum patch size configuration
-	maxPatchSize := 1024 // Default value
+	maxPatchSize := int(constants.DefaultMaxPatchSize) // Default value
 	if data.SafeOutputs != nil && data.SafeOutputs.MaximumPatchSize > 0 {
 		maxPatchSize = data.SafeOutputs.MaximumPatchSize
 	}

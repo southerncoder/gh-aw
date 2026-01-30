@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/githubnext/gh-aw/pkg/constants"
 	"github.com/githubnext/gh-aw/pkg/logger"
 )
 
@@ -295,7 +296,7 @@ var handlerRegistry = map[string]handlerBuilder{
 			return nil
 		}
 		c := cfg.CreatePullRequests
-		maxPatchSize := 1024 // default 1024 KB
+		maxPatchSize := int(constants.DefaultMaxPatchSize) // default 1024 KB
 		if cfg.MaximumPatchSize > 0 {
 			maxPatchSize = cfg.MaximumPatchSize
 		}
@@ -319,7 +320,7 @@ var handlerRegistry = map[string]handlerBuilder{
 			return nil
 		}
 		c := cfg.PushToPullRequestBranch
-		maxPatchSize := 1024 // default 1024 KB
+		maxPatchSize := int(constants.DefaultMaxPatchSize) // default 1024 KB
 		if cfg.MaximumPatchSize > 0 {
 			maxPatchSize = cfg.MaximumPatchSize
 		}

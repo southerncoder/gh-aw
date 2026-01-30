@@ -225,11 +225,76 @@ func (e EngineName) IsValid() bool {
 	return len(e) > 0
 }
 
+// FilePath represents a file system path.
+// This semantic type distinguishes file paths from arbitrary strings,
+// making path parameters explicit and enabling future validation logic.
+//
+// Example usage:
+//
+//	const PromptFilePath FilePath = "/tmp/gh-aw/aw-prompts/prompt.txt"
+//	func ReadFile(path FilePath) ([]byte, error) { ... }
+type FilePath string
+
+// String returns the string representation of the file path
+func (f FilePath) String() string {
+	return string(f)
+}
+
+// IsValid returns true if the file path is non-empty
+func (f FilePath) IsValid() bool {
+	return len(f) > 0
+}
+
+// ByteSize represents a size in bytes.
+// This semantic type distinguishes byte sizes from arbitrary integers,
+// making size parameters explicit and preventing accidental misuse.
+//
+// Example usage:
+//
+//	const DefaultMaxPatchSize ByteSize = 1024
+//	func AllocateBuffer(size ByteSize) []byte { ... }
+type ByteSize int
+
+// String returns the string representation of the byte size
+func (b ByteSize) String() string {
+	return fmt.Sprintf("%d", b)
+}
+
+// IsValid returns true if the byte size is non-negative
+func (b ByteSize) IsValid() bool {
+	return b >= 0
+}
+
 // MaxExpressionLineLength is the maximum length for a single line expression before breaking into multiline.
 const MaxExpressionLineLength LineLength = 120
 
 // ExpressionBreakThreshold is the threshold for breaking long lines at logical points.
 const ExpressionBreakThreshold LineLength = 100
+
+// File path constants
+
+// PromptFilePath is the file path where workflow prompts are written during compilation.
+// This path is used in the agent job to store the final prompt content before execution.
+const PromptFilePath FilePath = "/tmp/gh-aw/aw-prompts/prompt.txt"
+
+// Size constants
+
+// DefaultMaxPatchSize is the default maximum size (in KB) for patches in safe outputs.
+// This limit applies to create_pull_request and push_to_pull_request_branch operations.
+const DefaultMaxPatchSize ByteSize = 1024
+
+// DefaultYAMLBuilderSize is the default initial capacity for YAML string builder (in bytes).
+// Allocating 256KB upfront minimizes reallocations during workflow generation.
+// Average workflow generates ~200KB, so 256KB provides adequate buffer.
+const DefaultYAMLBuilderSize ByteSize = 256 * 1024
+
+// MaxChunkSize is the maximum size for content chunks (in bytes) when splitting prompts.
+// Set to 20900 bytes to stay under GitHub Actions' 21000-byte limit with a 100-byte buffer.
+const MaxChunkSize ByteSize = 20900
+
+// ChunkSizeBuffer is the buffer size (in bytes) reserved when calculating chunk limits.
+// This ensures content doesn't exceed GitHub Actions' size constraints.
+const ChunkSizeBuffer ByteSize = 100
 
 // DefaultMCPRegistryURL is the default MCP registry URL.
 const DefaultMCPRegistryURL URL = "https://api.mcp.github.com/v0.1"

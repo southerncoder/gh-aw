@@ -176,7 +176,7 @@ func (c *Compiler) generateYAML(data *WorkflowData, markdownPath string) (string
 	// Pre-allocate builder capacity based on estimated workflow size
 	// Average workflow generates ~200KB, allocate 256KB to minimize reallocations
 	var yaml strings.Builder
-	yaml.Grow(256 * 1024)
+	yaml.Grow(int(constants.DefaultYAMLBuilderSize))
 
 	// Generate workflow header comments (including hash)
 	c.generateWorkflowHeader(&yaml, data, frontmatterHash)
@@ -198,8 +198,8 @@ func (c *Compiler) generateYAML(data *WorkflowData, markdownPath string) (string
 }
 
 func splitContentIntoChunks(content string) []string {
-	const maxChunkSize = 20900        // 21000 - 100 character buffer
-	const indentSpaces = "          " // 10 spaces added to each line
+	const maxChunkSize = int(constants.MaxChunkSize) // 21000 - 100 character buffer
+	const indentSpaces = "          "                // 10 spaces added to each line
 
 	lines := strings.Split(content, "\n")
 	var chunks []string
@@ -278,13 +278,13 @@ func (c *Compiler) generatePrompt(yaml *strings.Builder, data *WorkflowData) {
 	// Validate that all placeholders have been substituted
 	yaml.WriteString("      - name: Validate prompt placeholders\n")
 	yaml.WriteString("        env:\n")
-	yaml.WriteString("          GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt\n")
+	fmt.Fprintf(yaml, "          GH_AW_PROMPT: %s\n", constants.PromptFilePath)
 	yaml.WriteString("        run: bash /opt/gh-aw/actions/validate_prompt_placeholders.sh\n")
 
 	// Print prompt (merged into prompt generation)
 	yaml.WriteString("      - name: Print prompt\n")
 	yaml.WriteString("        env:\n")
-	yaml.WriteString("          GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt\n")
+	fmt.Fprintf(yaml, "          GH_AW_PROMPT: %s\n", constants.PromptFilePath)
 	yaml.WriteString("        run: bash /opt/gh-aw/actions/print_prompt_summary.sh\n")
 }
 
