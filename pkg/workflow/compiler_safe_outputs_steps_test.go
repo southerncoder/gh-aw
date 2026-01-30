@@ -299,9 +299,10 @@ func TestBuildSharedPRCheckoutStepsConditions(t *testing.T) {
 // TestBuildHandlerManagerStep tests handler manager step generation
 func TestBuildHandlerManagerStep(t *testing.T) {
 	tests := []struct {
-		name          string
-		safeOutputs   *SafeOutputsConfig
-		checkContains []string
+		name              string
+		safeOutputs       *SafeOutputsConfig
+		parsedFrontmatter *FrontmatterConfig
+		checkContains     []string
 	}{
 		{
 			name: "basic handler manager",
@@ -338,6 +339,24 @@ func TestBuildHandlerManagerStep(t *testing.T) {
 				"GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG",
 			},
 		},
+		{
+			name: "handler manager with project URL from frontmatter",
+			safeOutputs: &SafeOutputsConfig{
+				MissingData: &MissingDataConfig{
+					CreateIssue: true,
+				},
+			},
+			parsedFrontmatter: &FrontmatterConfig{
+				Project: &ProjectConfig{
+					URL: "https://github.com/orgs/test-org/projects/456",
+				},
+			},
+			checkContains: []string{
+				"name: Process Safe Outputs",
+				"id: process_safe_outputs",
+				"GH_AW_PROJECT_URL: \"https://github.com/orgs/test-org/projects/456\"",
+			},
+		},
 		// Note: create_project and create_project_status_update are now handled by
 		// the project handler manager (buildProjectHandlerManagerStep), not the main handler manager
 	}
@@ -347,8 +366,9 @@ func TestBuildHandlerManagerStep(t *testing.T) {
 			compiler := NewCompiler()
 
 			workflowData := &WorkflowData{
-				Name:        "Test Workflow",
-				SafeOutputs: tt.safeOutputs,
+				Name:              "Test Workflow",
+				SafeOutputs:       tt.safeOutputs,
+				ParsedFrontmatter: tt.parsedFrontmatter,
 			}
 
 			steps := compiler.buildHandlerManagerStep(workflowData)

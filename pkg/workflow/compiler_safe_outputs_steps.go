@@ -182,6 +182,15 @@ func (c *Compiler) buildHandlerManagerStep(data *WorkflowData) []string {
 	// Add all safe output configuration env vars (still needed by individual handlers)
 	c.addAllSafeOutputConfigEnvVars(&steps, data)
 
+	// Add GH_AW_PROJECT_URL if project is configured in frontmatter
+	// This provides a default project URL for handlers that may need it (e.g., missing_data)
+	// even though they don't directly interact with projects. This ensures consistency
+	// across all safe output handlers when a workflow has a project configured.
+	if data.ParsedFrontmatter != nil && data.ParsedFrontmatter.Project != nil && data.ParsedFrontmatter.Project.URL != "" {
+		consolidatedSafeOutputsStepsLog.Printf("Adding GH_AW_PROJECT_URL to handler manager: %s", data.ParsedFrontmatter.Project.URL)
+		steps = append(steps, fmt.Sprintf("          GH_AW_PROJECT_URL: %q\n", data.ParsedFrontmatter.Project.URL))
+	}
+
 	// With section for github-token
 	// Use the standard safe outputs token for all operations
 	// Project-specific handlers (create_project) will use custom tokens from their handler config
