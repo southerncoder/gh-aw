@@ -623,4 +623,3 @@ func checkOnDefaultBranch(verbose bool) error {
 	return nil
 }
 
-// confirmPushOperation prompts the user to confirm push operation (skips in CI)
