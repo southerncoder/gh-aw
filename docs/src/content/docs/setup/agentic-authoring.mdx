@@ -22,10 +22,14 @@ To create agentic workflows using VSCode or a Coding Agent (Claude Code, Codex e
    ```sh wrap
    Initialize this repository for GitHub Agentic Workflows using https://github.com/githubnext/gh-aw/blob/main/install.md
 
-   Then follow the instructions in .github/agents/agentic-workflows.agent.md to create a workflow that triages issues.
+   Then follow the instructions in .github/agents/agentic-workflows.agent.md to create a workflow.
+   
+   The purpose of the workflow is to triage issues.
    ```
 
-3. If you haven't done it already you will also need to [set up your repository secrets](/gh-aw/reference/engines/) for the coding agent your workflow use (Copilot, Claude, Codex), and adjust the `engine:` setting in your workflow to match if not using Copilot CLI.
+   You can replace the last line with your desired workflow purpose and as much additional detail, context, goals, guardrails and purpose as you like.
+
+3. If you haven't done so already, [set up your repository secrets](/gh-aw/reference/engines/) for the coding agent your workflow use (Copilot, Claude, Codex). Also adjust the `engine:` setting in your generated workflow to match if not using Copilot CLI.
 
 ## Creating Agentic Workflows on github.com
 
@@ -61,7 +65,7 @@ The agent will understand your intent and route to the appropriate specialized p
 
 ### Step 3 - Setup required secrets
 
-If you haven't done it already you will also need to [set up your repository secrets](/gh-aw/reference/engines/) for the coding agent your workflow will be using (Copilot, Claude, Codex). You will also need to adjust the `engine:` setting in your workflow to match if not using Copilot CLI.
+If you haven't done so already, [set up your repository secrets](/gh-aw/reference/engines/) for the coding agent your workflow will be using (Copilot, Claude, Codex). Also need to adjust the `engine:` setting in your generated workflow to match if not using Copilot CLI.
 
 ## Going Further
 
