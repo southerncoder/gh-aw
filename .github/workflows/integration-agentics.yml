@@ -13,6 +13,14 @@ jobs:
   integration-test-agentics:
     name: Test Agentics Repository Integration
     runs-on: ubuntu-latest
+    env:
+      # Configure Go module proxy with fallback to direct download
+      # This prevents 403 Forbidden errors from proxy.golang.org
+      GOPROXY: https://proxy.golang.org,direct
+      # Ensure no public modules are treated as private
+      GOPRIVATE: ""
+      GONOPROXY: ""
+      GOSUMDB: sum.golang.org
     steps:
       - name: Checkout code
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5

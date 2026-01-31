@@ -19,6 +19,14 @@ jobs:
     concurrency:
       group: ci-${{ github.ref }}-test
       cancel-in-progress: true
+    env:
+      # Configure Go module proxy with fallback to direct download
+      # This prevents 403 Forbidden errors from proxy.golang.org
+      GOPROXY: https://proxy.golang.org,direct
+      # Ensure no public modules are treated as private
+      GOPRIVATE: ""
+      GONOPROXY: ""
+      GOSUMDB: sum.golang.org
     steps:
       - name: Checkout code
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
@@ -36,6 +44,24 @@ jobs:
             echo "✅ Go cache hit" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Go cache miss" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Verify Go environment and module access
+        run: |
+          echo "## Go Environment Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- GOPROXY: $GOPROXY" >> $GITHUB_STEP_SUMMARY
+          echo "- GOPRIVATE: ${GOPRIVATE:-<not set>}" >> $GITHUB_STEP_SUMMARY
+          echo "- GONOPROXY: ${GONOPROXY:-<not set>}" >> $GITHUB_STEP_SUMMARY
+          echo "- GOSUMDB: $GOSUMDB" >> $GITHUB_STEP_SUMMARY
+          
+          # Test proxy connectivity by downloading a small module
+          echo "Testing module proxy connectivity..."
+          if ! go list -m golang.org/x/sys@latest > /dev/null 2>&1; then
+            echo "❌ Failed to connect to Go module proxy" >> $GITHUB_STEP_SUMMARY
+            echo "::error::Unable to download modules from Go proxy. Check GOPROXY configuration."
+            exit 1
+          else
+            echo "✅ Go module proxy accessible" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Verify dependencies
@@ -171,6 +197,14 @@ jobs:
       group: ci-${{ github.ref }}-integration-${{ matrix.test-group.name }}
       cancel-in-progress: true
     name: "Integration: ${{ matrix.test-group.name }}"
+    env:
+      # Configure Go module proxy with fallback to direct download
+      # This prevents 403 Forbidden errors from proxy.golang.org
+      GOPROXY: https://proxy.golang.org,direct
+      # Ensure no public modules are treated as private
+      GOPRIVATE: ""
+      GONOPROXY: ""
+      GOSUMDB: sum.golang.org
     steps:
       - name: Checkout code
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
