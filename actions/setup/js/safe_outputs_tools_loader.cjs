@@ -27,6 +27,16 @@ function loadTools(server) {
     server.debug(`Tools file read successfully, attempting to parse JSON`);
     const tools = JSON.parse(toolsFileContent);
     server.debug(`Successfully parsed ${tools.length} tools from file`);
+
+    // Log details about dispatch_workflow tools for debugging
+    const dispatchWorkflowTools = tools.filter(t => t._workflow_name);
+    if (dispatchWorkflowTools.length > 0) {
+      server.debug(`  Found ${dispatchWorkflowTools.length} dispatch_workflow tools:`);
+      dispatchWorkflowTools.forEach(t => {
+        server.debug(`    - ${t.name} (workflow: ${t._workflow_name})`);
+      });
+    }
+
     return tools;
   } catch (error) {
     server.debug(`Error reading tools file: ${getErrorMessage(error)}`);
@@ -94,9 +104,19 @@ function registerPredefinedTools(server, tools, config, registerTool, normalizeT
 
     // Check if this is a dispatch_workflow tool (has _workflow_name metadata)
     // These tools are dynamically generated with workflow-specific names
-    if (tool._workflow_name && config.dispatch_workflow) {
-      registerTool(server, tool);
-      return;
+    if (tool._workflow_name) {
+      server.debug(`Found dispatch_workflow tool: ${tool.name} (_workflow_name: ${tool._workflow_name})`);
+      if (config.dispatch_workflow) {
+        server.debug(`  dispatch_workflow config exists, registering tool`);
+        registerTool(server, tool);
+        return;
+      } else {
+        // Note: Using server.debug() with "WARNING:" prefix since MCP server only provides
+        // debug and debugError methods. The prefix helps identify severity in logs.
+        server.debug(`  WARNING: dispatch_workflow config is missing or falsy - tool will NOT be registered`);
+        server.debug(`  Config keys: ${Object.keys(config).join(", ")}`);
+        server.debug(`  config.dispatch_workflow value: ${JSON.stringify(config.dispatch_workflow)}`);
+      }
     }
   });
 }
