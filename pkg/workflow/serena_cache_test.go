@@ -68,11 +68,11 @@ func TestIsSerenaEnabled(t *testing.T) {
 
 func TestGenerateSerenaCacheStep(t *testing.T) {
 	tests := []struct {
-		name           string
-		data           *WorkflowData
-		needsCheckout  bool
-		expectCache    bool
-		checkContents  []string
+		name          string
+		data          *WorkflowData
+		needsCheckout bool
+		expectCache   bool
+		checkContents []string
 	}{
 		{
 			name: "serena enabled with checkout",
