@@ -328,6 +328,44 @@ If Dependabot stops creating PRs:
 
 4. **Manual trigger**: You can manually trigger Dependabot from repository Settings → Security → Dependabot
 
+### CI Configuration and Go Module Proxy
+
+Our CI workflows are configured to prevent Go module download failures by using explicit proxy settings. All GitHub Actions workflows that use Go include the following environment variables:
+
+```yaml
+env:
+  # Configure Go module proxy with fallback to direct download
+  # This prevents 403 Forbidden errors from proxy.golang.org
+  GOPROXY: https://proxy.golang.org,direct
+  # Ensure no public modules are treated as private
+  GOPRIVATE: ""
+  GONOPROXY: ""
+  GOSUMDB: sum.golang.org
+```
+
+**Why this matters:**
+- **Prevents 403 Forbidden errors**: If `proxy.golang.org` is temporarily unavailable or blocks requests, Go will fall back to direct downloads
+- **Ensures public modules are accessible**: Empty `GOPRIVATE` and `GONOPROXY` settings prevent public modules from being treated as private
+- **Maintains checksum verification**: `GOSUMDB` ensures module integrity through the Go checksum database
+
+**Affected workflows:**
+- `.github/workflows/ci.yml` (test and integration jobs)
+- `.github/workflows/integration-agentics.yml`
+- `.github/workflows/format-and-commit.yml`
+- `.github/workflows/security-scan.yml` (gosec and govulncheck jobs)
+- `.github/workflows/license-check.yml`
+
+**Troubleshooting module download failures:**
+
+If you encounter `403 Forbidden` errors from Go module proxy:
+
+1. **Check environment variables**: Verify `GOPROXY`, `GOPRIVATE`, `GONOPROXY`, and `GOSUMDB` are set correctly
+2. **Test proxy connectivity**: Run `go list -m golang.org/x/sys@latest` to verify access
+3. **Use direct fallback**: If the proxy is blocked, the `,direct` suffix in `GOPROXY` enables direct downloads from source repositories
+4. **Check runner logs**: Look for proxy connectivity verification in the "Verify Go environment and module access" step
+
+For more details on the incident that led to these improvements, see issue #12894 (CI run #32917).
+
 ### Handling Dependabot PRs
 
 When reviewing Dependabot PRs:
