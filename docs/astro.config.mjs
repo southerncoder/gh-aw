@@ -159,12 +159,12 @@ export default defineConfig({
 						{ label: 'Quick Start', link: '/setup/quick-start/' },
 						{ label: 'Authoring Workflows with AI', link: '/setup/agentic-authoring/' },
 						{ label: 'CLI Commands', link: '/setup/cli/' },
-						{ label: 'VS Code Integration', link: '/setup/vscode/' },
 					],
 				},
 				{
 					label: 'Guides',
 					items: [
+						{ label: 'GitHub Actions Primer', link: '/guides/github-actions-primer/' },
 						{ label: 'Packaging & Distribution', link: '/guides/packaging-imports/' },
 						{ label: 'Security Best Practices', link: '/guides/security/' },
 						{ label: 'Using MCPs', link: '/guides/mcps/' },

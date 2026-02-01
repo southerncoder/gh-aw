@@ -17,7 +17,7 @@ type handlerConfigBuilder struct {
 // newHandlerConfigBuilder creates a new handler config builder
 func newHandlerConfigBuilder() *handlerConfigBuilder {
 	return &handlerConfigBuilder{
-		config: make(map[string]any),
+		config: map[string]any{},
 	}
 }
 
@@ -380,10 +380,16 @@ var handlerRegistry = map[string]handlerBuilder{
 			return nil
 		}
 		c := cfg.DispatchWorkflow
-		return newHandlerConfigBuilder().
+		builder := newHandlerConfigBuilder().
 			AddIfPositive("max", c.Max).
-			AddStringSlice("workflows", c.Workflows).
-			Build()
+			AddStringSlice("workflows", c.Workflows)
+
+		// Add workflow_files map if it has entries
+		if len(c.WorkflowFiles) > 0 {
+			builder.AddDefault("workflow_files", c.WorkflowFiles)
+		}
+
+		return builder.Build()
 	},
 	"missing_tool": func(cfg *SafeOutputsConfig) map[string]any {
 		if cfg.MissingTool == nil {
@@ -403,15 +409,9 @@ var handlerRegistry = map[string]handlerBuilder{
 			AddIfPositive("max", c.Max).
 			Build()
 	},
-	"noop": func(cfg *SafeOutputsConfig) map[string]any {
-		if cfg.NoOp == nil {
-			return nil
-		}
-		c := cfg.NoOp
-		return newHandlerConfigBuilder().
-			AddIfPositive("max", c.Max).
-			Build()
-	},
+	// Note: "noop" is intentionally NOT included here because it is always processed
+	// by a dedicated standalone step (see notify_comment.go buildConclusionJob).
+	// Adding it to the handler manager would create duplicate configuration overhead.
 	"autofix_code_scanning_alert": func(cfg *SafeOutputsConfig) map[string]any {
 		if cfg.AutofixCodeScanningAlert == nil {
 			return nil

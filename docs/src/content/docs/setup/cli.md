@@ -403,22 +403,6 @@ gh aw audit 12345678 --parse                              # Parse logs to markdo
 
 Logs are saved to `logs/run-{id}/` with filenames indicating the extraction level (job logs, specific step, or first failing step).
 
-### Agentic campaigns
-
-#### `campaign`
-
-Manage campaign definitions. See [Agentic Campaigns Guide](/gh-aw/guides/campaigns/) for complete documentation.
-
-**Quick Reference:**
-- `gh aw campaign` - List campaigns
-- `gh aw campaign status` - Show live status
-- `gh aw campaign new <id>` - Create new campaign
-- `gh aw campaign validate` - Validate specs
-
-**Options:** `--json`
-
-Alternative: create an issue with the `create-agentic-campaign` label to trigger automated campaign creation ([docs](/gh-aw/guides/campaigns/)).
-
 ### Management
 
 #### `enable`
@@ -672,6 +656,5 @@ See [Common Issues](/gh-aw/troubleshooting/common-issues/) and [Error Reference]
 - [Frontmatter](/gh-aw/reference/frontmatter/) - Configuration options
 - [Packaging & Distribution](/gh-aw/guides/packaging-imports/) - Adding and updating workflows
 - [Security Guide](/gh-aw/guides/security/) - Security best practices
-- [VS Code Setup](/gh-aw/setup/vscode/) - Editor integration and watch mode
 - [MCP Server Guide](/gh-aw/setup/mcp-server/) - MCP server configuration
 - [Agent Factory](/gh-aw/agent-factory-status/) - Agennt factory status
