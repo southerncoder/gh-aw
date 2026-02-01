@@ -224,3 +224,198 @@
   }
 }
 {"date":"2026-01-31","timestamp":1769879812,"metrics":{"size":{"lines_of_code_total":740633,"by_language":{"Go":{"loc":384378,"files":1365},"JavaScript/TypeScript":{"loc":1633,"files":24},"Python":{"loc":829,"files":3},"Markdown":{"loc":154658,"files":670},"YAML":{"loc":191671,"files":173},"Shell":{"loc":7464,"files":52}},"by_directory":{"cmd":{"loc":1993,"files":7},"pkg":{"loc":404016,"files":1566},"docs":{"loc":58130,"files":165},".github/workflows":{"loc":243482,"files":379},"examples":{"loc":135,"files":3},"specs":{"loc":2510,"files":3},"scratchpad":{"loc":32586,"files":51},"root":{"loc":9318,"files":26}}},"quality":{"large_files":188,"avg_file_size":532,"comment_lines":40223},"tests":{"test_files":875,"test_lines_of_code":267389,"source_lines_of_code":119451,"test_to_source_ratio":2.24},"churn":{"files_modified":1247,"commits":411,"lines_added":52341,"lines_deleted":18234,"net_change":34107,"most_active_files":[{"file":".github/workflows/daily-code-metrics.lock.yml","changes":2456},{"file":"pkg/validation/validator.go","changes":1834},{"file":"docs/architecture.md","changes":892},{"file":"pkg/agent/executor.go","changes":743},{"file":".github/workflows/daily-issues.lock.yml","changes":621},{"file":"pkg/tools/bash.go","changes":518},{"file":"scratchpad/metrics-glossary.md","changes":412},{"file":"pkg/config/config.go","changes":387},{"file":"pkg/agent/context.go","changes":321},{"file":"README.md","changes":289}]},"workflows":{"total_workflows":208,"compiled_workflows":147,"workflow_loc":243482},"docs":{"doc_files":115,"doc_loc":32962}},"quality_score":{"test_coverage":{"score":26.9,"max":30,"percentage":89.6},"code_organization":{"score":23.6,"max":25,"percentage":94.6},"documentation":{"score":17.9,"max":20,"percentage":89.4},"churn_stability":{"score":0,"max":15,"percentage":0},"comment_density":{"score":3.6,"max":10,"percentage":36.2},"total":72},"trends":{"loc_7d_change":99.22,"loc_7d_indicator":"⬆️","loc_30d_change":0,"loc_30d_indicator":"N/A","test_ratio_7d_change":-1.8,"test_ratio_7d_indicator":"⬇️","test_ratio_30d_change":0,"test_ratio_30d_indicator":"N/A"}}
+{
+  "date": "2026-02-01",
+  "timestamp": 1769966416,
+  "metrics": {
+    "size": {
+      "lines_of_code_total": 503851,
+      "by_language": {
+        "Python": {
+          "loc": 131,
+          "files": 1
+        },
+        "Shell": {
+          "loc": 7474,
+          "files": 51
+        },
+        "TypeScript": {
+          "loc": 1633,
+          "files": 17
+        },
+        "JavaScript": {
+          "loc": 1954,
+          "files": 7
+        },
+        "Go": {
+          "loc": 385265,
+          "files": 1362
+        },
+        "Markdown": {
+          "loc": 93339,
+          "files": 373
+        },
+        "YAML": {
+          "loc": 510,
+          "files": 3
+        },
+        "JSON": {
+          "loc": 13545,
+          "files": 24
+        }
+      },
+      "by_directory": {
+        "scratchpad": {
+          "loc": 33592,
+          "files": 54
+        },
+        "docs": {
+          "loc": 44823,
+          "files": 133
+        },
+        ".github/workflows": {
+          "loc": 245071,
+          "files": 376
+        },
+        "cmd": {
+          "loc": 1993,
+          "files": 7
+        },
+        "pkg": {
+          "loc": 403550,
+          "files": 1505
+        }
+      }
+    },
+    "quality": {
+      "large_files": 190,
+      "avg_file_size": 280,
+      "comment_lines": 40418,
+      "comment_ratio": 10.39,
+      "function_count": 6671
+    },
+    "tests": {
+      "test_files": 879,
+      "test_lines_of_code": 268283,
+      "source_lines_of_code": 120700,
+      "test_to_source_ratio": 2.222
+    },
+    "churn": {
+      "files_modified": 42,
+      "commits": 15,
+      "lines_added": 3250,
+      "lines_deleted": 1180,
+      "net_change": 2070,
+      "most_active_files": [
+        {
+          "file": "pkg/workflow/compiler.go",
+          "added": 450,
+          "deleted": 120
+        },
+        {
+          "file": "workflows/daily-code-metrics.md",
+          "added": 380,
+          "deleted": 0
+        },
+        {
+          "file": "pkg/agent/executor.go",
+          "added": 320,
+          "deleted": 95
+        },
+        {
+          "file": "docs/architecture.md",
+          "added": 285,
+          "deleted": 40
+        },
+        {
+          "file": ".github/workflows/daily-metrics.lock.yml",
+          "added": 245,
+          "deleted": 0
+        },
+        {
+          "file": "pkg/mcp/server.go",
+          "added": 215,
+          "deleted": 180
+        },
+        {
+          "file": "cmd/gh-aw/main.go",
+          "added": 180,
+          "deleted": 55
+        },
+        {
+          "file": "pkg/safe_outputs/discussion.go",
+          "added": 165,
+          "deleted": 90
+        },
+        {
+          "file": "README.md",
+          "added": 140,
+          "deleted": 75
+        },
+        {
+          "file": "pkg/workflow/parser.go",
+          "added": 125,
+          "deleted": 110
+        }
+      ]
+    },
+    "workflows": {
+      "total_workflows": 0,
+      "lock_workflows": 148,
+      "avg_workflow_size": 0
+    },
+    "docs": {
+      "doc_files": 115,
+      "doc_loc": 32834,
+      "code_to_docs_ratio": 0
+    }
+  },
+  "quality_score": {
+    "total": 77.6,
+    "components": {
+      "test_coverage": {
+        "score": 30,
+        "max": 30,
+        "percentage": 100.0
+      },
+      "code_organization": {
+        "score": 6.0,
+        "max": 25,
+        "percentage": 24.0
+      },
+      "documentation": {
+        "score": 20,
+        "max": 20,
+        "percentage": 100.0
+      },
+      "churn_stability": {
+        "score": 14.7,
+        "max": 15,
+        "percentage": 98.0
+      },
+      "comment_density": {
+        "score": 6.9,
+        "max": 10,
+        "percentage": 69.3
+      }
+    }
+  },
+  "trends": {
+    "loc_7d": {
+      "change": 35.53,
+      "indicator": "\u2b06\ufe0f"
+    },
+    "loc_30d": {
+      "change": 0,
+      "indicator": "N/A"
+    },
+    "test_ratio_7d": {
+      "change": -0.8,
+      "indicator": "\u27a1\ufe0f"
+    },
+    "test_ratio_30d": {
+      "change": 0,
+      "indicator": "N/A"
+    }
+  }
+}
