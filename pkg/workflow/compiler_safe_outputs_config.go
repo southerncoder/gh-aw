@@ -482,7 +482,7 @@ func (c *Compiler) addHandlerManagerConfigEnvVar(steps *[]string, data *Workflow
 	}
 
 	compilerSafeOutputsConfigLog.Print("Building handler manager configuration for safe-outputs")
-	
+
 	// Build regular handlers config
 	regularConfig := make(map[string]map[string]any)
 	for handlerName, builder := range regularHandlerRegistry {
