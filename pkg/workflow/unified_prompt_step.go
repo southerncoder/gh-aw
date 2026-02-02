@@ -70,6 +70,10 @@ func (c *Compiler) generateUnifiedPromptStep(yaml *strings.Builder, data *Workfl
 
 	yaml.WriteString("        run: |\n")
 
+	// Use grouped redirects to avoid SC2129 shellcheck warnings
+	// All commands are grouped and redirected once to the file
+	yaml.WriteString("          {\n")
+
 	// Track if we're inside a heredoc
 	inHeredoc := false
 
@@ -81,43 +85,43 @@ func (c *Compiler) generateUnifiedPromptStep(yaml *strings.Builder, data *Workfl
 		if section.ShellCondition != "" {
 			// Close heredoc if open, add conditional
 			if inHeredoc {
-				yaml.WriteString("          PROMPT_EOF\n")
+				yaml.WriteString("            PROMPT_EOF\n")
 				inHeredoc = false
 			}
-			fmt.Fprintf(yaml, "          if %s; then\n", section.ShellCondition)
+			fmt.Fprintf(yaml, "            if %s; then\n", section.ShellCondition)
 
 			if section.IsFile {
 				// File reference inside conditional
 				promptPath := fmt.Sprintf("%s/%s", promptsDir, section.Content)
-				yaml.WriteString("            " + fmt.Sprintf("cat \"%s\" >> \"$GH_AW_PROMPT\"\n", promptPath))
+				yaml.WriteString("              " + fmt.Sprintf("cat \"%s\"\n", promptPath))
 			} else {
 				// Inline content inside conditional - open heredoc, write content, close
-				yaml.WriteString("            cat << 'PROMPT_EOF' >> \"$GH_AW_PROMPT\"\n")
+				yaml.WriteString("              cat << 'PROMPT_EOF'\n")
 				normalizedContent := normalizeLeadingWhitespace(section.Content)
 				cleanedContent := removeConsecutiveEmptyLines(normalizedContent)
 				contentLines := strings.Split(cleanedContent, "\n")
 				for _, line := range contentLines {
-					yaml.WriteString("            " + line + "\n")
+					yaml.WriteString("              " + line + "\n")
 				}
-				yaml.WriteString("            PROMPT_EOF\n")
+				yaml.WriteString("              PROMPT_EOF\n")
 			}
 
-			yaml.WriteString("          fi\n")
+			yaml.WriteString("            fi\n")
 		} else {
 			// Unconditional section
 			if section.IsFile {
 				// Close heredoc if open
 				if inHeredoc {
-					yaml.WriteString("          PROMPT_EOF\n")
+					yaml.WriteString("            PROMPT_EOF\n")
 					inHeredoc = false
 				}
 				// Cat the file
 				promptPath := fmt.Sprintf("%s/%s", promptsDir, section.Content)
-				yaml.WriteString("          " + fmt.Sprintf("cat \"%s\" >> \"$GH_AW_PROMPT\"\n", promptPath))
+				yaml.WriteString("            " + fmt.Sprintf("cat \"%s\"\n", promptPath))
 			} else {
 				// Inline content - open heredoc if not already open
 				if !inHeredoc {
-					yaml.WriteString("          cat << 'PROMPT_EOF' >> \"$GH_AW_PROMPT\"\n")
+					yaml.WriteString("            cat << 'PROMPT_EOF'\n")
 					inHeredoc = true
 				}
 				// Write content directly to open heredoc
@@ -125,7 +129,7 @@ func (c *Compiler) generateUnifiedPromptStep(yaml *strings.Builder, data *Workfl
 				cleanedContent := removeConsecutiveEmptyLines(normalizedContent)
 				contentLines := strings.Split(cleanedContent, "\n")
 				for _, line := range contentLines {
-					yaml.WriteString("          " + line + "\n")
+					yaml.WriteString("            " + line + "\n")
 				}
 			}
 		}
@@ -133,8 +137,11 @@ func (c *Compiler) generateUnifiedPromptStep(yaml *strings.Builder, data *Workfl
 
 	// Close heredoc if still open
 	if inHeredoc {
-		yaml.WriteString("          PROMPT_EOF\n")
+		yaml.WriteString("            PROMPT_EOF\n")
 	}
+
+	// Close the grouped redirect and write to file
+	yaml.WriteString("          } >> \"$GH_AW_PROMPT\"\n")
 
 	unifiedPromptLog.Print("Unified prompt step generated successfully")
 }

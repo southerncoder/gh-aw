@@ -142,11 +142,14 @@ func TestPromptStepRefactoringConsistency(t *testing.T) {
 		}
 		// Verify temp folder instructions are included (without redirect since it's in a grouped redirect)
 		if !strings.Contains(result, `cat "/opt/gh-aw/prompts/temp_folder_prompt.md"`) {
-			t.Error("Expected cat command for temp folder prompt file not found")
+			t.Errorf("Expected cat command for temp folder prompt file not found. Got:\n%s", result)
 		}
-		// Verify grouped redirect is used
-		if !strings.Contains(result, "{\n") || !strings.Contains(result, `} > "$GH_AW_PROMPT"`) {
-			t.Error("Expected grouped redirect pattern not found")
+		// Verify grouped redirect is used (with >> for append mode)
+		if !strings.Contains(result, "{\n") {
+			t.Errorf("Expected opening brace not found. Got:\n%s", result)
+		}
+		if !strings.Contains(result, `} >> "$GH_AW_PROMPT"`) {
+			t.Errorf("Expected closing brace with append redirect not found. Got:\n%s", result)
 		}
 	})
 }
