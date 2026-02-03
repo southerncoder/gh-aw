@@ -51,7 +51,6 @@ func TestGhCLIMountInAWFContainer(t *testing.T) {
 			},
 			SandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 		}
@@ -281,7 +280,6 @@ func TestUtilityBinaryMountsInAWFContainer(t *testing.T) {
 			},
 			SandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 		}

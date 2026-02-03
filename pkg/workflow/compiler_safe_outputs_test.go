@@ -700,7 +700,6 @@ func TestApplyDefaultTools(t *testing.T) {
 			tools: map[string]any{},
 			sandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 			expectedGitHub: true,
@@ -863,7 +862,6 @@ func TestCompilerIsSandboxEnabled(t *testing.T) {
 			name: "sandbox explicitly disabled",
 			sandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 			expected: false,
@@ -941,7 +939,6 @@ func TestCompilerIsSandboxEnabled(t *testing.T) {
 			name: "sandbox disabled overrides firewall",
 			sandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 			networkPermissions: &NetworkPermissions{
@@ -1404,7 +1401,6 @@ func TestCompilerIsSandboxEnabledPrecedence(t *testing.T) {
 		Agent: &AgentSandboxConfig{
 			ID:       "awf",
 			Type:     SandboxTypeSRT,
-			Disabled: true,
 		},
 		Type: SandboxTypeSRT,
 	}

@@ -78,8 +78,6 @@ func collectDockerImages(tools map[string]any, workflowData *WorkflowData) []str
 					dockerLog.Printf("Added sandbox.mcp container: %s", image)
 				}
 			}
-		} else if sandboxDisabled {
-			dockerLog.Print("Sandbox disabled, skipping MCP gateway container image")
 		}
 	}
 

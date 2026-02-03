@@ -393,7 +393,6 @@ func TestSandboxMCPGatewayValidation(t *testing.T) {
 				Name: "test-workflow",
 				SandboxConfig: &SandboxConfig{
 					Agent: &AgentSandboxConfig{
-						Disabled: true,
 					},
 				},
 				Tools: map[string]any{}, // No tools configured
@@ -406,7 +405,6 @@ func TestSandboxMCPGatewayValidation(t *testing.T) {
 				Name: "test-workflow",
 				SandboxConfig: &SandboxConfig{
 					Agent: &AgentSandboxConfig{
-						Disabled: true,
 					},
 				},
 				Tools: map[string]any{

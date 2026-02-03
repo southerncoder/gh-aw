@@ -432,7 +432,6 @@ func TestStrictModeFirewallValidation(t *testing.T) {
 
 		sandboxConfig := &SandboxConfig{
 			Agent: &AgentSandboxConfig{
-				Disabled: true,
 			},
 		}
 
@@ -458,7 +457,6 @@ func TestStrictModeFirewallValidation(t *testing.T) {
 
 		sandboxConfig := &SandboxConfig{
 			Agent: &AgentSandboxConfig{
-				Disabled: true,
 			},
 		}
 
@@ -521,7 +519,6 @@ func TestStrictModeFirewallValidation(t *testing.T) {
 
 		sandboxConfig := &SandboxConfig{
 			Agent: &AgentSandboxConfig{
-				Disabled: true,
 			},
 		}
 

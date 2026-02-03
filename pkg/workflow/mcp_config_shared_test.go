@@ -308,7 +308,6 @@ func TestHTTPMCPServerLocalhostRewritingWithFirewall(t *testing.T) {
 			Name: "test-workflow",
 			SandboxConfig: &SandboxConfig{
 				Agent: &AgentSandboxConfig{
-					Disabled: true,
 				},
 			},
 		}
