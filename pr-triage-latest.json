@@ -1,24 +1,90 @@
 {
-  "run_date": "2026-02-03T06:24:51.368Z",
-  "run_id": "21619564765",
-  "total_prs_triaged": 2,
+  "run_date": "2026-02-03T12:19:05.629Z",
+  "run_id": "21629884904",
+  "total_prs_triaged": 3,
   "results": [
     {
-      "number": 13421,
-      "title": "Document root cause of daily-regulatory discussion creation failure",
-      "url": "https://github.com/github/gh-aw/pull/13421",
+      "number": 13420,
+      "title": "Refactor expired-entity cleanup scripts to share expiration processing",
+      "url": "https://github.com/github/gh-aw/pull/13420",
+      "author": "Codex",
+      "category": "refactor",
+      "risk": "medium",
+      "priority_score": 52,
+      "impact_score": 30,
+      "impact_rationale": "Refactoring to reduce code duplication across 3 cleanup scripts; Medium-scale changes (5 files, -209 net lines); Improves maintainability; JavaScript code in actions/setup/js/",
+      "urgency_score": 14,
+      "urgency_rationale": "6 hours old; Ready for review (not draft); Refactoring has moderate urgency; Addresses technical debt",
+      "quality_score": 8,
+      "quality_rationale": "CI pending; Ready for review; Detailed description with code examples; Good refactoring approach (extracted shared helper); Has review comments",
+      "action": "batch_review",
+      "action_explanation": "This is a well-structured refactoring PR that addresses code duplication detected by the duplicate-code-detector workflow. The changes are moderate in scope (net -209 lines) and improve maintainability by extracting shared expiration processing logic. The PR is ready for review (not draft) and has received some review comments. Once CI passes, it should be reviewed alongside other JavaScript refactoring PRs in batch batch-refactor-001.",
+      "draft": false,
+      "age_days": 0,
+      "age_hours": 6,
+      "changed_files": 5,
+      "additions": 386,
+      "deletions": 595,
+      "ci_status": "pending",
+      "mergeable_state": "unknown",
+      "comments": 1,
+      "commits": 3,
+      "fixes_issue": "13419",
+      "agent_workflow": "duplicate-code-detector",
+      "batch_id": "batch-refactor-001",
+      "files_changed": [
+        "actions/setup/js/close_expired_discussions.cjs",
+        "actions/setup/js/close_expired_issues.cjs",
+        "actions/setup/js/close_expired_pull_requests.cjs",
+        "actions/setup/js/expired_entity_cleanup_helpers.cjs"
+      ]
+    },
+    {
+      "number": 13468,
+      "title": "[WIP] Configure gh-aw MCP server to use tools.agentic-workflows",
+      "url": "https://github.com/github/gh-aw/pull/13468",
       "author": "Claude",
-      "category": "docs",
+      "category": "feature",
+      "risk": "medium",
+      "priority_score": 45,
+      "impact_score": 30,
+      "impact_rationale": "New MCP server configuration feature using tools.agentic-workflows; Medium-scale changes (3 files, +620 lines); Enhances workflow capabilities",
+      "urgency_score": 8,
+      "urgency_rationale": "Less than 1 hour old; Draft status; Medium urgency for new feature",
+      "quality_score": 7,
+      "quality_rationale": "CI pending; Draft status; Good description with checklist showing progress; Missing final cleanup",
+      "action": "batch_review",
+      "action_explanation": "This is a well-structured feature PR adding MCP server configuration support. The changes are moderate in scope (620 additions) and follow good development practices with a clear checklist. Once CI passes and draft status is removed, it should be reviewed alongside other MCP/tooling enhancement PRs.",
+      "draft": true,
+      "age_days": 0,
+      "age_hours": 0,
+      "changed_files": 3,
+      "additions": 620,
+      "deletions": 0,
+      "ci_status": "pending",
+      "mergeable_state": "unstable",
+      "comments": 0,
+      "commits": 2,
+      "fixes_issue": null,
+      "agent_workflow": "claude",
+      "batch_id": null
+    },
+    {
+      "number": 13469,
+      "title": "[WIP] Update mcp-server startup script to log to core.info",
+      "url": "https://github.com/github/gh-aw/pull/13469",
+      "author": "Copilot",
+      "category": "chore",
       "risk": "low",
-      "priority_score": 29,
-      "impact_score": 15,
-      "impact_rationale": "Documentation-only PR explaining workflow failure root cause; No code changes; Investigation findings for issue #13417",
-      "urgency_score": 9,
-      "urgency_rationale": "Less than 1 day old (17 minutes); Documentation has low urgency; PR is draft",
-      "quality_score": 5,
-      "quality_rationale": "CI pending; Detailed description with investigation findings; Draft status; No files changed (doc-only explanation in PR body)",
+      "priority_score": 18,
+      "impact_score": 10,
+      "impact_rationale": "Draft WIP PR with no code changes yet; Shell script logging improvement; Low immediate impact",
+      "urgency_score": 5,
+      "urgency_rationale": "Less than 1 hour old; Draft status; Low urgency chore task",
+      "quality_score": 3,
+      "quality_rationale": "CI pending; Draft status; No files changed yet; Minimal description",
       "action": "defer",
-      "action_explanation": "This is a documentation/investigation PR with no code changes. Since it's in draft status and explains a repository settings issue rather than proposing code fixes, it should be deferred until ready for review. The actual fix requires repository settings changes, not code changes.",
+      "action_explanation": "This is a draft WIP PR with no code changes yet. The PR should be deferred until the implementation is complete and draft status is removed. Once ready for review, the PR can be re-triaged for fast-track or batch review consideration.",
       "draft": true,
       "age_days": 0,
       "age_hours": 0,
@@ -29,78 +95,44 @@
       "mergeable_state": "unstable",
       "comments": 0,
       "commits": 1,
-      "fixes_issue": "13417",
-      "agent_workflow": "daily-regulatory",
+      "fixes_issue": null,
+      "agent_workflow": "copilot",
       "batch_id": null
-    },
-    {
-      "number": 13420,
-      "title": "Refactor expired-entity cleanup scripts to share expiration processing",
-      "url": "https://github.com/github/gh-aw/pull/13420",
-      "author": "Codex",
-      "category": "refactor",
-      "risk": "medium",
-      "priority_score": 52,
-      "impact_score": 30,
-      "impact_rationale": "Refactoring to reduce code duplication across 3 cleanup scripts; Medium-scale changes (4 files, -210 net lines); Improves maintainability; JavaScript code in actions/setup/js/",
-      "urgency_score": 14,
-      "urgency_rationale": "Less than 1 day old (17 minutes); Refactoring has moderate urgency; PR is draft",
-      "quality_score": 8,
-      "quality_rationale": "CI pending; Detailed description with code examples; Draft status; Good refactoring approach (extracted shared helper)",
-      "action": "batch_review",
-      "action_explanation": "This is a well-structured refactoring PR that addresses code duplication. The changes are moderate in scope and improve maintainability. Once CI passes and draft status is removed, it should be reviewed alongside other JavaScript refactoring PRs.",
-      "draft": true,
-      "age_days": 0,
-      "age_hours": 0,
-      "changed_files": 4,
-      "additions": 383,
-      "deletions": 593,
-      "ci_status": "pending",
-      "mergeable_state": "unstable",
-      "comments": 0,
-      "commits": 2,
-      "fixes_issue": "13419",
-      "agent_workflow": "duplicate-code-detector",
-      "batch_id": "batch-refactor-001",
-      "files_changed": [
-        "actions/setup/js/close_expired_discussions.cjs",
-        "actions/setup/js/close_expired_issues.cjs",
-        "actions/setup/js/close_expired_pull_requests.cjs",
-        "actions/setup/js/expired_entity_cleanup_helpers.cjs"
-      ]
     }
   ],
   "statistics": {
-    "total": 2,
+    "total": 3,
     "by_category": {
-      "docs": 1,
-      "refactor": 1
+      "refactor": 1,
+      "feature": 1,
+      "chore": 1
     },
     "by_risk": {
       "low": 1,
-      "medium": 1
+      "medium": 2
     },
     "by_priority": {
       "low": 1,
-      "medium": 1
+      "medium": 2
     },
     "by_action": {
       "defer": 1,
-      "batch_review": 1
+      "batch_review": 2
     },
     "by_agent": {
+      "Codex": 1,
       "Claude": 1,
-      "Codex": 1
+      "Copilot": 1
     },
     "by_draft_status": {
       "draft": 2,
-      "ready": 0
+      "ready": 1
     }
   },
   "auto_merge_candidates": [],
   "fast_track_needed": [],
-  "batch_review": [13420],
-  "defer": [13421],
+  "batch_review": [13420, 13468],
+  "defer": [13469],
   "close_candidates": [],
   "batches": {
     "batch-refactor-001": {

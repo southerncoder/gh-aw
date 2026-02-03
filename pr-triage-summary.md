@@ -1,52 +1,34 @@
-# PR Triage Summary - 2026-02-03
+# PR Triage Summary - February 3, 2026
 
-## Quick Stats
+**Run ID:** 21629884904  
+**Timestamp:** 2026-02-03T12:19:05.629Z  
+**Total PRs Triaged:** 3
 
-- **Total PRs:** 2
-- **Auto-merge Ready:** 0
-- **Fast-track Needed:** 0
-- **Batch Review:** 1
-- **Deferred:** 1
-- **All PRs are DRAFT** ✍️
+## Summary
 
-## PRs by Priority
+All 3 open agent PRs were successfully triaged with labels and comments applied. The backlog is manageable with no high-priority or auto-merge candidates at this time.
 
-### Medium Priority (52/100)
-- [#13420](https://github.com/github/gh-aw/pull/13420) - Refactor expired-entity cleanup scripts (Codex)
-  - **Action:** batch_review
-  - **Category:** refactor | **Risk:** medium
-  - **Batch:** batch-refactor-001
+## Key Findings
 
-### Low Priority (29/100)
-- [#13421](https://github.com/github/gh-aw/pull/13421) - Document daily-regulatory failure root cause (Claude)
-  - **Action:** defer
-  - **Category:** docs | **Risk:** low
+- **67% of PRs are in draft status** - Higher draft rate indicates PRs need faster completion
+- **No high-priority PRs** - All PRs scored between 18-52/100 priority
+- **No auto-merge candidates** - All PRs have pending CI or are drafts
+- **1 batch identified** - JavaScript refactoring PRs can be reviewed together
 
-## Batch Opportunities
+## PRs by Action
 
-### batch-refactor-001: JavaScript Refactoring
-- **PRs:** #13420
-- **Description:** Code cleanup and duplication removal in expired entity scripts
-- **Ready:** No (draft)
+### Batch Review (2 PRs)
+- #13420 - Refactor expired-entity cleanup scripts (Priority: 52, Ready)
+- #13468 - Configure gh-aw MCP server (Priority: 45, Draft)
 
-## Backlog Health: �� Healthy
+### Defer (1 PR)
+- #13469 - Update mcp-server startup script (Priority: 18, Draft, No code yet)
 
-- Only 2 open PRs (down from 3 in previous run)
-- No stale PRs (>30 days)
-- No abandoned PRs (>90 days)
-- All PRs are fresh (< 1 day old)
-- Both PRs are work-in-progress (draft status)
+## Next Triage
 
-## Trends vs Last Run
+Scheduled for: **6 hours from now** (2026-02-03T18:19 UTC)
 
-**Positive Changes:**
-- ✅ Backlog reduced (3 → 2 PRs)
-- ✅ Lower risk profile (low/medium vs all high)
-- ✅ No stale PRs
-- ✅ Fresh activity from agents
-
-**Next Triage:** 6 hours from now
-
----
-*Last updated: 2026-02-03T06:27:00Z*
-*Run ID: 21619564765*
+Expected activities:
+- Re-triage draft PRs if completed
+- Check CI status for pending PRs
+- Review any new PRs created in the interim
