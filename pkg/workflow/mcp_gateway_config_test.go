@@ -167,8 +167,7 @@ func TestBuildMCPGatewayConfig(t *testing.T) {
 			name: "with sandbox enabled",
 			workflowData: &WorkflowData{
 				SandboxConfig: &SandboxConfig{
-					Agent: &AgentSandboxConfig{
-					},
+					Agent: &AgentSandboxConfig{},
 				},
 			},
 			expected: &MCPGatewayRuntimeConfig{

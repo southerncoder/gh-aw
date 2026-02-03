@@ -513,8 +513,7 @@ func TestStrictModeFirewallValidation(t *testing.T) {
 		}
 
 		sandboxConfig := &SandboxConfig{
-			Agent: &AgentSandboxConfig{
-			},
+			Agent: &AgentSandboxConfig{},
 		}
 
 		// Even in non-strict mode, sandbox.agent: false should be rejected by validation

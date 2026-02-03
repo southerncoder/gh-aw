@@ -699,8 +699,7 @@ func TestApplyDefaultTools(t *testing.T) {
 			name:  "sandbox disabled explicitly",
 			tools: map[string]any{},
 			sandboxConfig: &SandboxConfig{
-				Agent: &AgentSandboxConfig{
-				},
+				Agent: &AgentSandboxConfig{},
 			},
 			expectedGitHub: true,
 			expectedEdit:   false,
@@ -861,8 +860,7 @@ func TestCompilerIsSandboxEnabled(t *testing.T) {
 		{
 			name: "sandbox explicitly disabled",
 			sandboxConfig: &SandboxConfig{
-				Agent: &AgentSandboxConfig{
-				},
+				Agent: &AgentSandboxConfig{},
 			},
 			expected: false,
 		},
@@ -938,8 +936,7 @@ func TestCompilerIsSandboxEnabled(t *testing.T) {
 		{
 			name: "sandbox disabled overrides firewall",
 			sandboxConfig: &SandboxConfig{
-				Agent: &AgentSandboxConfig{
-				},
+				Agent: &AgentSandboxConfig{},
 			},
 			networkPermissions: &NetworkPermissions{
 				Firewall: &FirewallConfig{
@@ -1399,8 +1396,8 @@ func TestCompilerIsSandboxEnabledPrecedence(t *testing.T) {
 	// Test that disabled flag takes precedence over all other settings
 	config := &SandboxConfig{
 		Agent: &AgentSandboxConfig{
-			ID:       "awf",
-			Type:     SandboxTypeSRT,
+			ID:   "awf",
+			Type: SandboxTypeSRT,
 		},
 		Type: SandboxTypeSRT,
 	}
