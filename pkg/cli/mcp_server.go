@@ -167,27 +167,31 @@ Note: Output can be filtered using the jq parameter.`,
 		default:
 		}
 
-		// Build command arguments - always use JSON for MCP
-		cmdArgs := []string{"status", "--json"}
-		if args.Pattern != "" {
-			cmdArgs = append(cmdArgs, args.Pattern)
-		}
-
 		mcpLog.Printf("Executing status tool: pattern=%s, jqFilter=%s", args.Pattern, args.JqFilter)
-		// Execute the CLI command
-		cmd := execCmd(ctx, cmdArgs...)
-		output, err := cmd.CombinedOutput()
 
+		// Call GetWorkflowStatuses directly instead of spawning subprocess
+		statuses, err := GetWorkflowStatuses(args.Pattern, "", "", "")
 		if err != nil {
 			return nil, nil, &jsonrpc.Error{
 				Code:    jsonrpc.CodeInternalError,
-				Message: "failed to execute status command",
-				Data:    mcpErrorData(map[string]any{"error": err.Error(), "output": string(output)}),
+				Message: "failed to get workflow statuses",
+				Data:    mcpErrorData(map[string]any{"error": err.Error()}),
 			}
 		}
 
+		// Marshal to JSON
+		jsonBytes, err := json.Marshal(statuses)
+		if err != nil {
+			return nil, nil, &jsonrpc.Error{
+				Code:    jsonrpc.CodeInternalError,
+				Message: "failed to marshal workflow statuses",
+				Data:    mcpErrorData(map[string]any{"error": err.Error()}),
+			}
+		}
+
+		outputStr := string(jsonBytes)
+
 		// Apply jq filter if provided
-		outputStr := string(output)
 		if args.JqFilter != "" {
 			filteredOutput, jqErr := ApplyJqFilter(outputStr, args.JqFilter)
 			if jqErr != nil {
