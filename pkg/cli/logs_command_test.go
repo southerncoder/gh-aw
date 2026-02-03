@@ -86,7 +86,7 @@ func TestLogsCommandFlagDefaults(t *testing.T) {
 		{"start-date", ""},
 		{"end-date", ""},
 		{"engine", ""},
-		{"output", ".github/aw/logs"}, // Updated to match actual default
+		{"output", "/tmp/gh-aw/logs"}, // Updated to use temp folder
 		{"ref", ""},
 		{"after-run-id", "0"},
 		{"before-run-id", "0"},
@@ -239,7 +239,7 @@ func TestLogsCommandOutputFlag(t *testing.T) {
 	assert.Equal(t, "o", outputFlag.Shorthand, "output shorthand should be 'o'")
 
 	// Output flag has default value
-	assert.Equal(t, ".github/aw/logs", outputFlag.DefValue, "output default should be '.github/aw/logs'")
+	assert.Equal(t, "/tmp/gh-aw/logs", outputFlag.DefValue, "output default should be '/tmp/gh-aw/logs'")
 }
 
 func TestLogsCommandHelpText(t *testing.T) {

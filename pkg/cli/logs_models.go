@@ -16,7 +16,7 @@ const (
 	// runSummaryFileName is the name of the summary file created in each run folder
 	runSummaryFileName = "run_summary.json"
 	// defaultLogsOutputDir is the default directory for downloaded workflow logs
-	defaultLogsOutputDir = ".github/aw/logs"
+	defaultLogsOutputDir = "/tmp/gh-aw/logs"
 )
 
 // Constants for the iterative algorithm

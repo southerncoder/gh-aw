@@ -229,11 +229,6 @@ clean:
 	rm -f sbom.spdx.json sbom.cdx.json
 	@# Remove security scan reports
 	rm -f gosec-report.json gosec-results.sarif govulncheck-results.sarif trivy-results.sarif
-	@# Remove downloaded logs (but keep .gitignore)
-	@if [ -d .github/aw/logs ]; then \
-		find .github/aw/logs -type f ! -name '.gitignore' -delete 2>/dev/null || true; \
-		find .github/aw/logs -type d -empty -delete 2>/dev/null || true; \
-	fi
 	@# Remove installed gh extension if it exists
 	@if [ -d "$$HOME/.local/share/gh/extensions/gh-aw" ]; then \
 		echo "Removing installed gh-aw extension..."; \
