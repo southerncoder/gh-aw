@@ -1,7 +1,7 @@
-## Flagged Items for Monitoring (2026-01-26)
+## Flagged Items for Monitoring (2026-02-03)
 
-- GitHub remote MCP auth-test continues failing due to toolset loading; verify MCP server initialization and consider local fallback.
-- CI lint failures from staticcheck QF1003 in pkg/campaign/interactive.go plus missing origin/main for incremental linting.
-- list_code_scanning_alerts remains the largest MCP payload (24K tokens, 97KB); list_pull_requests also heavy due to duplicated repo objects.
-- High-cost Copilot workflows (Agent Persona Explorer, CI Cleaner) remain outliers for tokens/run and total spend.
-- Orchestration sessions still dominate Copilot session metrics, masking true task completion rates.
+- Copilot session analysis reports 56% missing logs and 100% failure rate for Security Guard Agent sessions; both indicate systemic logging/config issues.
+- MCP structural analysis shows list_code_scanning_alerts returning ~95K tokens, exceeding practical limits; requires pagination/minimal mode or alternative query patterns.
+- Remote GitHub MCP auth-test continues failing due to toolset loading, suggesting environment/tooling misconfiguration rather than auth failure.
+- High per-run token outliers (Agent Persona Explorer, jsweep, CI Failure Doctor) and high-volume dispatch workflows remain cost hotspots.
+- Weekly workflow analysis shows heavy "action_required" concentration for PR review bots on a single PR; potential redundancy and notification noise.

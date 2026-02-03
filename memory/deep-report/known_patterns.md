@@ -1,8 +1,7 @@
-## Known Patterns (2026-01-26)
+## Known Patterns (2026-02-03)
 
-- Copilot token spend remains concentrated: Agent Persona Explorer (30.2M) and CI Cleaner (26.9M) are top cost drivers, while Code Scanning Fixer runs most frequently with high efficiency.
-- MCP response bloat persists for list_code_scanning_alerts (24K tokens, 97KB) and list_pull_requests (13.8K tokens), while labels/branches/workflows/discussions remain consistently efficient.
-- GitHub remote MCP auth-test failures continue to be tool-loading issues (toolsets not available), not authentication failures.
-- CI reliability issues are dominated by lint failures (staticcheck QF1003) and missing origin/main for incremental linting; core workflow success rates remain high otherwise.
-- Copilot session completion rate improved to 20% with strong error-recovery success (90.9%), while orchestration sessions still skew overall completion metrics.
-- Workflow corpus continues steady growth with strict standards: 139 lockfiles, 100% concurrency, 70% schedule + workflow_dispatch pairing, and consistent 50-100 KB sizes.
+- Token usage is now tracked daily; spend concentrates in a small set of high-volume workflows (Test YAML Import, Test Dispatcher Workflow, Issue Monster), while per-run outliers (Agent Persona Explorer, jsweep, CI Failure Doctor) dominate cost/run.
+- Copilot session outcomes skew toward "action_required" and "skipped" with low completion rates; successful sessions correlate strongly with high-quality, long-context prompts and 4-12 minute run durations.
+- GitHub MCP structural analysis confirms extreme response bloat for list_code_scanning_alerts (~95K tokens) and continued verbosity for list_releases/list_pull_requests; core repo tools remain efficient.
+- Remote GitHub MCP auth-test failures continue to be tool-loading issues (toolsets not available), not authentication failures.
+- Workflow lockfiles remain highly standardized in size/structure (149 lockfiles, 50-100 KB cluster), with strong adoption of schedule + workflow_dispatch and minimal workflow-level permissions.
