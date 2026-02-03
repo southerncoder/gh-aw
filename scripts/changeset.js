@@ -7,7 +7,8 @@
  * Usage:
  *   node changeset.js version    - Preview next version from changesets
  *   node changeset.js release    - Create release and update CHANGELOG
- *   GH_AW_CURRENT_VERSION=v1.2.3 node changeset.js release to force current version
+ *   GH_AW_CURRENT_VERSION=v1.2.3 node changeset.js release    - Use specified version (don't bump)
+ *   GH_AW_CURRENT_VERSION=v1.2.3 node changeset.js version    - Preview with specified version
  */
 
 const fs = require("fs");
@@ -516,12 +517,20 @@ function runVersion() {
 
   const bumpType = determineVersionBump(changesets);
   const currentVersion = getCurrentVersion();
-  const nextVersion = bumpVersion(currentVersion, bumpType);
-  const versionString = formatVersion(nextVersion);
 
-  console.log(formatInfoMessage(`Current version: ${formatVersion(currentVersion)}`));
-  console.log(formatInfoMessage(`Bump type: ${bumpType}`));
-  console.log(formatInfoMessage(`Next version: ${versionString}`));
+  // If GH_AW_CURRENT_VERSION is set, use it as the version (don't bump)
+  let versionString;
+  if (process.env.GH_AW_CURRENT_VERSION) {
+    versionString = process.env.GH_AW_CURRENT_VERSION;
+    console.log(formatInfoMessage(`Using forced version: ${versionString}`));
+    console.log(formatInfoMessage(`Bump type: ${bumpType}`));
+  } else {
+    const nextVersion = bumpVersion(currentVersion, bumpType);
+    versionString = formatVersion(nextVersion);
+    console.log(formatInfoMessage(`Current version: ${formatVersion(currentVersion)}`));
+    console.log(formatInfoMessage(`Bump type: ${bumpType}`));
+    console.log(formatInfoMessage(`Next version: ${versionString}`));
+  }
   console.log(formatInfoMessage("\nChanges:"));
 
   for (const cs of changesets) {
@@ -582,12 +591,21 @@ async function runRelease(releaseType, skipConfirmation = false) {
   }
 
   const currentVersion = getCurrentVersion();
-  const nextVersion = bumpVersion(currentVersion, bumpType);
-  const versionString = formatVersion(nextVersion);
 
-  console.log(formatInfoMessage(`Current version: ${formatVersion(currentVersion)}`));
-  console.log(formatInfoMessage(`Bump type: ${bumpType}`));
-  console.log(formatInfoMessage(`Next version: ${versionString}`));
+  // If GH_AW_CURRENT_VERSION is set, use it as the release version (don't bump)
+  // This allows forcing a specific version for the release
+  let versionString;
+  if (process.env.GH_AW_CURRENT_VERSION) {
+    versionString = process.env.GH_AW_CURRENT_VERSION;
+    console.log(formatInfoMessage(`Using forced version: ${versionString}`));
+    console.log(formatInfoMessage(`Bump type: ${bumpType}`));
+  } else {
+    const nextVersion = bumpVersion(currentVersion, bumpType);
+    versionString = formatVersion(nextVersion);
+    console.log(formatInfoMessage(`Current version: ${formatVersion(currentVersion)}`));
+    console.log(formatInfoMessage(`Bump type: ${bumpType}`));
+    console.log(formatInfoMessage(`Next version: ${versionString}`));
+  }
   console.log(formatInfoMessage(`Creating ${bumpType} release: ${versionString}`));
 
   // Show what will be included in the release
