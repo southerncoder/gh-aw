@@ -59,9 +59,9 @@ With --codespaces flag:
 - Adds GitHub Copilot extensions and gh aw CLI installation
 - Use without value (--codespaces) for current repo only, or with comma-separated repos (--codespaces repo1,repo2)
 
-With --campaign flag:
-- Enables campaign-related prompts and functionality for multi-workflow coordination
-- Note: Campaign creation is now handled through the agentic-campaign-designer custom agent (use @agentic-campaign-designer in Copilot Chat)
+With --campaign flag (experimental):
+- Enables campaign-related prompts and functionality for progress tracking and multi-workflow coordination
+- Note: Campaign creation is handled through the agentic-workflows dispatcher (use @agentic-workflows and ask to work on an agentic campaign)
 
 With --completions flag:
 - Automatically detects your shell (bash, zsh, fish, or PowerShell)
@@ -147,7 +147,7 @@ Examples:
 
 	cmd.Flags().Bool("no-mcp", false, "Skip configuring GitHub Copilot Agent MCP server integration")
 	cmd.Flags().Bool("mcp", false, "Configure GitHub Copilot Agent MCP server integration (deprecated, MCP is enabled by default)")
-	cmd.Flags().Bool("campaign", false, "Install the Campaign Designer agent for gh-aw campaigns in this repository")
+	cmd.Flags().Bool("campaign", false, "Enable experimental campaign guidance (campaigns are routed via the agentic-workflows dispatcher)")
 	cmd.Flags().Bool("tokens", false, "Validate required secrets for agentic workflows")
 	cmd.Flags().String("engine", "", "AI engine to check tokens for (copilot, claude, codex) - requires --tokens flag")
 	cmd.Flags().String("codespaces", "", "Create devcontainer.json for GitHub Codespaces with agentic workflows support. Specify comma-separated repository names in the same organization (e.g., repo1,repo2), or use without value for current repo only")
