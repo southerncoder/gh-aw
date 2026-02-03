@@ -420,54 +420,49 @@ func TestStrictModeFirewallValidation(t *testing.T) {
 		}
 	})
 
-	t.Run("strict mode refuses sandbox.agent: false for copilot", func(t *testing.T) {
+	t.Run("strict mode with sandbox enabled passes", func(t *testing.T) {
 		compiler := NewCompiler()
 		compiler.SetStrictMode(true)
 
 		networkPerms := &NetworkPermissions{
 			Allowed:           []string{"example.com"},
 			ExplicitlyDefined: true,
-			Firewall:          nil,
+			Firewall:          &FirewallConfig{Enabled: true},
 		}
 
 		sandboxConfig := &SandboxConfig{
 			Agent: &AgentSandboxConfig{
+				Type: SandboxTypeAWF,
 			},
 		}
 
 		err := compiler.validateStrictFirewall("copilot", networkPerms, sandboxConfig)
-		if err == nil {
-			t.Error("Expected error when sandbox.agent is false in strict mode for copilot")
-		}
-		expectedMsg := "sandbox: false"
-		if !strings.Contains(err.Error(), expectedMsg) {
-			t.Errorf("Expected error message to contain '%s', got: %v", expectedMsg, err)
+		if err != nil {
+			t.Errorf("Expected no error with sandbox enabled in strict mode, got: %v", err)
 		}
 	})
 
-	t.Run("strict mode refuses sandbox.agent: false for all engines", func(t *testing.T) {
+	t.Run("strict mode with sandbox always enabled for all engines", func(t *testing.T) {
 		compiler := NewCompiler()
 		compiler.SetStrictMode(true)
 
 		networkPerms := &NetworkPermissions{
 			Allowed:           []string{"example.com"},
 			ExplicitlyDefined: true,
-			Firewall:          nil,
+			Firewall:          &FirewallConfig{Enabled: true},
 		}
 
 		sandboxConfig := &SandboxConfig{
 			Agent: &AgentSandboxConfig{
+				Type: SandboxTypeAWF,
 			},
 		}
 
-		// All engines should refuse sandbox.agent: false in strict mode
+		// All engines support sandbox now
 		err := compiler.validateStrictFirewall("claude", networkPerms, sandboxConfig)
-		if err == nil {
-			t.Error("Expected error for non-copilot engine with sandbox.agent: false in strict mode")
-		}
-		expectedMsg := "sandbox: false"
-		if !strings.Contains(err.Error(), expectedMsg) {
-			t.Errorf("Expected error message to contain '%s', got: %v", expectedMsg, err)
+		// Claude doesn't support firewall so this should pass
+		if err != nil {
+			t.Errorf("Expected no error for non-copilot engine with sandbox in strict mode, got: %v", err)
 		}
 	})
 
