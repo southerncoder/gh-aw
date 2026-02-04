@@ -191,17 +191,37 @@ func ensureDevcontainerConfig(verbose bool, additionalRepos []string) error {
 		}
 	}
 
-	// Write config file with proper indentation
-	data, err := json.MarshalIndent(config, "", "  ")
+	// Serialize the new config to JSON
+	newData, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal devcontainer.json: %w", err)
 	}
 
 	// Add newline at end of file
-	data = append(data, '\n')
+	newData = append(newData, '\n')
+
+	// If file exists, check if content has changed (compare normalized JSON)
+	if existingConfig != nil {
+		// Serialize the existing config to compare
+		existingNormalized, err := json.MarshalIndent(existingConfig, "", "  ")
+		if err != nil {
+			return fmt.Errorf("failed to marshal existing config for comparison: %w", err)
+		}
+		existingNormalized = append(existingNormalized, '\n')
+
+		// Compare normalized JSON - if they're the same, skip writing
+		if string(newData) == string(existingNormalized) {
+			devcontainerLog.Printf("No changes detected, skipping write: %s", devcontainerPath)
+			if verbose {
+				fmt.Fprintf(os.Stderr, "No changes to devcontainer.json\n")
+			}
+			return nil
+		}
+		devcontainerLog.Printf("Changes detected, will update file: %s", devcontainerPath)
+	}
 
 	// Use owner-only read/write permissions (0600) for security best practices
-	if err := os.WriteFile(devcontainerPath, data, 0600); err != nil {
+	if err := os.WriteFile(devcontainerPath, newData, 0600); err != nil {
 		return fmt.Errorf("failed to write devcontainer.json: %w", err)
 	}
 	devcontainerLog.Printf("Wrote file: %s", devcontainerPath)

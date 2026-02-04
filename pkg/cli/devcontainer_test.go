@@ -119,9 +119,26 @@ func TestEnsureDevcontainerConfig(t *testing.T) {
 	}
 
 	// Test that running again doesn't fail (idempotency)
+	// Get file stat before second run
+	statBefore, err := os.Stat(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to stat devcontainer.json before second run: %v", err)
+	}
+
 	err = ensureDevcontainerConfig(false, []string{})
 	if err != nil {
 		t.Fatalf("ensureDevcontainerConfig() should be idempotent, but failed: %v", err)
+	}
+
+	// Get file stat after second run
+	statAfter, err := os.Stat(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to stat devcontainer.json after second run: %v", err)
+	}
+
+	// File modification time should be the same (file should not have been rewritten)
+	if !statBefore.ModTime().Equal(statAfter.ModTime()) {
+		t.Error("Expected devcontainer.json to not be rewritten when no changes are needed")
 	}
 }
 
@@ -766,5 +783,81 @@ func TestGetCurrentRepoName(t *testing.T) {
 	repoName := getCurrentRepoName()
 	if repoName == "" {
 		t.Error("Expected getCurrentRepoName() to return a non-empty string")
+	}
+}
+
+func TestEnsureDevcontainerConfigNoWriteWhenUnchanged(t *testing.T) {
+	tmpDir := testutil.TempDir(t, "test-*")
+
+	originalDir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Failed to get current directory: %v", err)
+	}
+	defer func() {
+		_ = os.Chdir(originalDir)
+	}()
+
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change to temp directory: %v", err)
+	}
+
+	// Initialize git repo
+	if err := exec.Command("git", "init").Run(); err != nil {
+		t.Skip("Git not available")
+	}
+
+	// Configure git and add remote
+	exec.Command("git", "config", "user.name", "Test User").Run()
+	exec.Command("git", "config", "user.email", "test@example.com").Run()
+	exec.Command("git", "remote", "add", "origin", "https://github.com/testorg/testrepo.git").Run()
+
+	// Create initial devcontainer.json
+	err = ensureDevcontainerConfig(false, []string{})
+	if err != nil {
+		t.Fatalf("Initial ensureDevcontainerConfig() failed: %v", err)
+	}
+
+	devcontainerPath := filepath.Join(".devcontainer", "devcontainer.json")
+
+	// Get file info after first write
+	firstStat, err := os.Stat(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to stat file after first write: %v", err)
+	}
+	firstModTime := firstStat.ModTime()
+
+	// Read the first content
+	firstContent, err := os.ReadFile(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to read file after first write: %v", err)
+	}
+
+	// Run again with same parameters - should not write
+	err = ensureDevcontainerConfig(false, []string{})
+	if err != nil {
+		t.Fatalf("Second ensureDevcontainerConfig() failed: %v", err)
+	}
+
+	// Get file info after second run
+	secondStat, err := os.Stat(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to stat file after second run: %v", err)
+	}
+	secondModTime := secondStat.ModTime()
+
+	// Read the second content
+	secondContent, err := os.ReadFile(devcontainerPath)
+	if err != nil {
+		t.Fatalf("Failed to read file after second run: %v", err)
+	}
+
+	// Modification times should be equal (file was not rewritten)
+	if !firstModTime.Equal(secondModTime) {
+		t.Errorf("File was rewritten when no changes were needed. First modtime: %v, Second modtime: %v", firstModTime, secondModTime)
+	}
+
+	// Content should be identical
+	if string(firstContent) != string(secondContent) {
+		t.Error("File content changed when it should not have")
 	}
 }
