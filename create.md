@@ -38,12 +38,14 @@ You should see version information displayed. If you encounter an error, check t
 
 ## Step 2: Create the Workflow or do Other Actions
 
-Follow the instructions in the appropriate prompt based on the user's request.
+Follow carefully the instructions in the appropriate prompt file based on the user's request. Read ALL the instructions in the prompt file before taking any action.
 
-Here ROOT is the location where you found this file. For example,
+Below, ROOT is the location where you found this file. For example,
 
-- if this file is at `https://github.com/github/gh-aw/blob/main/create.md` then the ROOT is `https://github.com/github/gh-aw/blob/main/`
-- if this file is at `https://github.com/github/gh-aw/blob/v0.35.1/create.md` then the ROOT is `https://github.com/github/gh-aw/v0.35.1/main/`
+- if this file is at `https://raw.githubusercontent.com/github/gh-aw/main/create.md` then the ROOT is `https://raw.githubusercontent.com/github/gh-aw/main`
+- if this file is at `https://raw.githubusercontent.com/github/gh-aw/v0.35.1/create.md` then the ROOT is `https://github.com/github/gh-aw/v0.35.1/main`
+
+Here are the common actions you may be asked to do, with links to the appropriate prompt files:
 
 ### Create New Workflow
 
@@ -77,7 +79,7 @@ Note: When developing *inside* the gh-aw repository itself, these same files als
 
 **Load when**: User wants to modify, improve, or refactor an existing workflow
 
-**Prompt file**: `ROOT/.github/aw/update-agentic-workflow.md` (relative to the location where you found this file. For example, if this file is at `https://github.com/github/gh-aw/blob/main/create.md` then the prompt file is at `https://github.com/github/gh-aw/blob/main/.github/aw/update-agentic-workflow.md`)
+**Prompt file**: `ROOT/.github/aw/update-agentic-workflow.md`
 
 **Use cases**:
 
@@ -89,7 +91,7 @@ Note: When developing *inside* the gh-aw repository itself, these same files als
 
 **Load when**: User needs to investigate, audit, debug, or understand a workflow, troubleshoot issues, analyze logs, or fix errors
 
-**Prompt file**: `ROOT/.github/aw/debug-agentic-workflow.md` (relative to the location where you found this file. For example, if this file is at `https://github.com/github/gh-aw/blob/main/create.md` then the prompt file is at `https://github.com/github/gh-aw/blob/main/.github/aw/debug-agentic-workflow.md`)
+**Prompt file**: `ROOT/.github/aw/debug-agentic-workflow.md`
 
 **Use cases**:
 
@@ -101,7 +103,7 @@ Note: When developing *inside* the gh-aw repository itself, these same files als
 
 **Load when**: User wants to upgrade workflows to a new gh-aw version or fix deprecations
 
-**Prompt file**: `ROOT/.github/aw/upgrade-agentic-workflows.md` (relative to the location where you found this file. For example, if this file is at `https://github.com/github/gh-aw/blob/main/create.md` then the prompt file is at `https://github.com/github/gh-aw/blob/main/.github/aw/debug-agentic-workflow.md`)
+**Prompt file**: `ROOT/.github/aw/upgrade-agentic-workflows.md`
 
 **Use cases**:
 
@@ -113,7 +115,7 @@ Note: When developing *inside* the gh-aw repository itself, these same files als
 
 **Load when**: User wants to create a reusable workflow component or wrap an MCP server
 
-**Prompt file**: `ROOT/.github/aw/create-shared-agentic-workflow.md` (relative to the location where you found this file. For example, if this file is at `https://github.com/github/gh-aw/blob/main/create.md` then the prompt file is at `https://github.com/github/gh-aw/blob/main/.github/aw/update-agentic-workflow.md`)
+**Prompt file**: `ROOT/.github/aw/create-shared-agentic-workflow.md`
 
 **Use cases**:
 
