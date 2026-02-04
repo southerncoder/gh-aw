@@ -220,7 +220,7 @@ func (c *AddInteractiveConfig) collectGenericAPIKey(opt *constants.EngineOption)
 	fmt.Fprintln(os.Stderr, "")
 	fmt.Fprintln(os.Stderr, console.FormatInfoMessage(fmt.Sprintf("%s requires an API key.", opt.Label)))
 	fmt.Fprintln(os.Stderr, "")
-	fmt.Fprintln(os.Stderr, "Get your API key from:")
+	fmt.Fprintln(os.Stderr, console.FormatInfoMessage("Get your API key from:"))
 	fmt.Fprintln(os.Stderr, console.FormatCommandMessage(fmt.Sprintf("  %s", opt.KeyURL)))
 	fmt.Fprintln(os.Stderr, "")
 
