@@ -1,28 +1,23 @@
-# PR Triage Summary - February 3, 2026 18:26 UTC
+# PR Triage Summary - 2026-02-04T00:35:56Z
 
 ## Quick Stats
-- **Total PRs Triaged:** 2
-- **Priority Distribution:** High (1), Medium (1)
-- **Fast-track:** 1 | **Batch Review:** 1
-- **Agent:** Copilot (2)
+- **Total PRs:** 6
+- **Auto-merge:** 2 (PRs #13609, #13613)
+- **Fast-track:** 2 (PRs #13576, #13612)
+- **Batch review:** 2 (PRs #13569, #13614)
+- **Draft PRs:** 3
+- **Ready PRs:** 3
 
-## Key Highlights
+## Top Priority
+1. **#13576** (75 pts) - AWF chroot mode - Critical infrastructure change
+2. **#13612** (68 pts) - Remove embedded templates - Removes 5000+ lines of debt
+3. **#13614** (62 pts) - Secret modification barriers - Security enhancement
 
-### 🔥 Fast-track PR
-**PR #13538** (Priority: 78/100) - Add special import handling for copilot-setup-steps.yml
-- High-quality implementation with 3 new test files
-- Ready for review, actively engaged by maintainer
-- Affects core compiler logic
+## Actions Taken
+- ✅ Created discussion with full triage report
+- ✅ Added triage comments to all 6 PRs
+- ✅ Saved triage results to repo memory
 
-### 📦 Batch: batch-feature-cli-001
-**PR #13518** (Priority: 52/100) - Conditionally include campaign routing in dispatcher
-- Still in draft
-- CLI enhancement for init command UX
-
-## Trends vs Previous Run (6 hours ago)
-- ✅ Higher quality PRs (avg quality 12/20 vs 6/20)
-- ✅ More fast-track candidates (1 vs 0)
-- ✅ Focus on feature development (100% vs 33%)
-
-## Next Scheduled Run
-- **6 hours from now** (2026-02-04 00:26 UTC)
+## Next Run
+- Recommended: 6 hours (high activity period)
+- Expected: 2-4 new PRs based on velocity
