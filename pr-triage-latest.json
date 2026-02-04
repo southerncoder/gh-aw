@@ -1,111 +1,161 @@
 {
-  "run_date": "2026-02-04T12:20:43.176596+00:00",
-  "run_id": "21671131149",
-  "total_prs_triaged": 2,
+  "run_date": "2026-02-04T18:23:35.490020+00:00",
+  "run_id": "21683226506",
+  "total_prs_triaged": 5,
   "results": [
     {
-      "number": 13576,
-      "title": "Use AWF --enable-chroot mode and remove unnecessary --mount and --env flags",
-      "url": "https://github.com/github/gh-aw/pull/13576",
+      "number": 13773,
+      "title": "Fix TestSetupCLIAction integration test string expectations",
+      "url": "https://github.com/github/gh-aw/pull/13773",
       "author": "Copilot",
-      "draft": false,
-      "category": "feature",
+      "draft": true,
+      "category": "test",
       "risk": "high",
-      "priority_score": 85,
-      "impact_score": 50,
+      "priority_score": 63,
+      "impact_score": 25,
       "urgency_score": 25,
-      "quality_score": 10,
-      "action": "fast_track",
-      "age_hours": 16.08,
-      "age_days": 0.67,
-      "changed_files": 158,
-      "additions": 894,
-      "deletions": 1355,
-      "comments": 118,
-      "commits": 30,
+      "quality_score": 13,
+      "action": "batch_review",
+      "age_hours": 0.33,
+      "age_days": 0.01,
+      "changed_files": 72,
+      "additions": 74,
+      "deletions": 73,
+      "comments": 0,
+      "commits": 3,
       "ci_status": "pending",
-      "mergeable_state": "unknown",
-      "fixes_issue": 13379,
-      "assignees": [
-        "Mossaka",
-        "Copilot"
-      ],
-      "impact_rationale": "Major infrastructure improvement adopting AWF chroot mode across all engines; simplifies codebase significantly (net -461 lines); affects core workflow generation; fixes issue #13379; 158 files changed indicating thorough implementation",
-      "urgency_rationale": "Created 16.1 hours ago (0.7 days); not draft (ready for review); 118 comments showing extensive engagement; 30 commits indicating iterative development; CI pending; fixes reported issue; architectural improvement with wide impact",
-      "quality_rationale": "CI pending (mergeable_state: unknown); comprehensive PR description with implementation checklist and changesets; very large changeset but well-documented; extremely active discussion (118 comments); includes tests; fixes reported issue; iterative development (30 commits)",
-      "action_explanation": "This is a critical infrastructure improvement that significantly simplifies the codebase while adopting AWF chroot mode. The PR has been actively developed with extensive discussion (118 comments, 30 commits), showing thorough iteration and collaboration. Despite the large scope and pending CI, the architectural benefits (net -461 lines), issue resolution (fixes #13379), and high engagement warrant fast-track review. The work quality is high with comprehensive documentation."
+      "mergeable_state": "unstable",
+      "fixes_issue": 13772
     },
     {
-      "number": 13706,
-      "title": "[WIP] Fix failing tests in the codebase",
-      "url": "https://github.com/github/gh-aw/pull/13706",
+      "number": 13757,
+      "title": "Exclude metadata permission from generated workflow YAML",
+      "url": "https://github.com/github/gh-aw/pull/13757",
+      "author": "Copilot",
+      "draft": true,
+      "category": "feature",
+      "risk": "high",
+      "priority_score": 60,
+      "impact_score": 30,
+      "urgency_score": 20,
+      "quality_score": 10,
+      "action": "batch_review",
+      "age_hours": 1.23,
+      "age_days": 0.05,
+      "changed_files": 76,
+      "additions": 166,
+      "deletions": 71,
+      "comments": 3,
+      "commits": 6,
+      "ci_status": "pending",
+      "mergeable_state": "unknown",
+      "fixes_issue": null
+    },
+    {
+      "number": 13767,
+      "title": "Add 5-minute timeout to docker pull commands",
+      "url": "https://github.com/github/gh-aw/pull/13767",
+      "author": "Copilot",
+      "draft": true,
+      "category": "feature",
+      "risk": "high",
+      "priority_score": 55,
+      "impact_score": 30,
+      "urgency_score": 15,
+      "quality_score": 10,
+      "action": "batch_review",
+      "age_hours": 0.58,
+      "age_days": 0.02,
+      "changed_files": 72,
+      "additions": 81,
+      "deletions": 72,
+      "comments": 0,
+      "commits": 3,
+      "ci_status": "pending",
+      "mergeable_state": "unstable",
+      "fixes_issue": null
+    },
+    {
+      "number": 13752,
+      "title": "Fix integration test package failure by pre-building binary",
+      "url": "https://github.com/github/gh-aw/pull/13752",
       "author": "Copilot",
       "draft": true,
       "category": "test",
       "risk": "low",
-      "priority_score": 52,
-      "impact_score": 35,
-      "urgency_score": 10,
-      "quality_score": 7,
-      "action": "defer",
-      "age_hours": 0.07,
-      "age_days": 0.0,
-      "changed_files": 0,
-      "additions": 0,
+      "priority_score": 50,
+      "impact_score": 25,
+      "urgency_score": 15,
+      "quality_score": 10,
+      "action": "batch_review",
+      "age_hours": 1.94,
+      "age_days": 0.08,
+      "changed_files": 1,
+      "additions": 3,
       "deletions": 0,
       "comments": 0,
-      "commits": 1,
+      "commits": 2,
+      "ci_status": "pending",
+      "mergeable_state": "unknown",
+      "fixes_issue": null
+    },
+    {
+      "number": 13769,
+      "title": "Render console instructions instead of editing existing MCP/setup files in init command",
+      "url": "https://github.com/github/gh-aw/pull/13769",
+      "author": "Copilot",
+      "draft": true,
+      "category": "refactor",
+      "risk": "high",
+      "priority_score": 48,
+      "impact_score": 20,
+      "urgency_score": 15,
+      "quality_score": 13,
+      "action": "batch_review",
+      "age_hours": 0.43,
+      "age_days": 0.02,
+      "changed_files": 76,
+      "additions": 229,
+      "deletions": 193,
+      "comments": 0,
+      "commits": 4,
       "ci_status": "pending",
       "mergeable_state": "unstable",
-      "fixes_issue": null,
-      "assignees": [
-        "pelikhan",
-        "Copilot"
-      ],
-      "impact_rationale": "Test fix addressing CI failures; no code changes yet (WIP); when implemented will improve test reliability; affects test suite quality",
-      "urgency_rationale": "Created 0.1 hours ago (very recent); draft status (not ready for review); 0 comments (brand new); CI pending; test fixes are important for code quality but not critical",
-      "quality_rationale": "CI pending (no failures yet); draft status with minimal description; no actual changes yet (0 additions/deletions); waiting for implementation",
-      "action_explanation": "This is a WIP PR with no actual code changes yet. The PR is in draft mode and appears to be in the planning phase. Should be deferred until actual test fixes are implemented and the draft status is removed."
+      "fixes_issue": null
     }
   ],
   "statistics": {
-    "total": 2,
+    "total": 5,
     "by_category": {
-      "feature": 1,
-      "test": 1
+      "test": 2,
+      "feature": 2,
+      "refactor": 1
     },
     "by_risk": {
-      "high": 1,
+      "high": 4,
       "low": 1
     },
     "by_priority": {
-      "high": 1,
-      "medium": 1,
-      "low": 0
+      "medium": 5
     },
     "by_action": {
-      "fast_track": 1,
-      "defer": 1
-    },
-    "by_agent": {
-      "Copilot": 2
+      "batch_review": 5
     },
     "by_draft_status": {
-      "draft": 1,
-      "ready": 1
-    },
-    "by_ci_status": {
-      "pending": 2
+      "draft": 5,
+      "ready": 0
     }
   },
   "auto_merge_candidates": [],
-  "fast_track_needed": [
-    13576
+  "fast_track_needed": [],
+  "batch_review": [
+    13773,
+    13757,
+    13767,
+    13752,
+    13769
   ],
-  "batch_review": [],
-  "defer": [
-    13706
-  ],
+  "defer": [],
   "close_candidates": [],
   "batches": {}
 }
