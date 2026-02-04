@@ -651,3 +651,154 @@
   "trends": {}
 }{"date": "2026-02-03", "timestamp": 1770116948, "metrics": {"size": {"lines_of_code_total": 473151, "total_files": 2291, "by_language": {"Go": {"loc": 296411, "files": 1190, "percentage": 62.9}, "Other": {"loc": 86963, "files": 0, "percentage": 18.4}, "Markdown": {"loc": 53432, "files": 506, "percentage": 11.3}, "JSON": {"loc": 26569, "files": 29, "percentage": 5.6}, "Shell": {"loc": 5234, "files": 42, "percentage": 1.1}, "JavaScript": {"loc": 1580, "files": 7, "percentage": 0.3}, "CSS": {"loc": 1281, "files": 1, "percentage": 0.3}, "TypeScript": {"loc": 941, "files": 17, "percentage": 0.2}, "YAML": {"loc": 616, "files": 4, "percentage": 0.1}, "Python": {"loc": 106, "files": 1, "percentage": 0.0}, "Dockerfile": {"loc": 18, "files": 1, "percentage": 0.0}}, "by_directory": [{"path": "pkg", "loc": 313435, "files": 1566, "percentage": 66.3}, {"path": ".github/workflows", "loc": 202979, "files": 382, "percentage": 42.9}, {"path": "actions", "loc": 74954, "files": 409, "percentage": 15.8}, {"path": "docs", "loc": 47849, "files": 163, "percentage": 10.1}, {"path": "scratchpad", "loc": 19351, "files": 54, "percentage": 4.1}, {"path": "skills", "loc": 4528, "files": 27, "percentage": 1.0}, {"path": "scripts", "loc": 2415, "files": 18, "percentage": 0.5}, {"path": "cmd", "loc": 1483, "files": 7, "percentage": 0.3}, {"path": "specs", "loc": 1375, "files": 3, "percentage": 0.3}, {"path": "socials", "loc": 1201, "files": 12, "percentage": 0.3}]}, "quality": {"total_files": 2291, "avg_file_size": 206.5, "large_files_count": 171, "comment_lines": 44289, "comment_ratio": 12.68}, "tests": {"test_files": 891, "test_lines_of_code": 217681, "source_lines_of_code": 87344, "test_to_source_ratio": 2.49}, "churn": {"commits_7d": 422, "files_modified_7d": 2035, "lines_added_7d": 185730, "lines_deleted_7d": 191668, "net_change_7d": -5938, "most_active_files": [{"file": "test-result.json", "added": 68872, "deleted": 68872}, {"file": ".github/workflows/security-alert-burndown.campaign.g.lock.yml", "added": 4411, "deleted": 4411}, {"file": ".github/workflows/security-alert-burndown.lock.yml", "added": 4539, "deleted": 3325}, {"file": ".github/workflows/smoke-claude-tmp.lock.yml", "added": 2280, "deleted": 2280}, {"file": ".github/workflows/functional-pragmatist.lock.yml", "added": 1593, "deleted": 1616}, {"file": ".github/workflows/security-alert-burndown.campaign.g.md", "added": 1576, "deleted": 1576}, {"file": ".github/workflows/agent-ci.yml", "added": 1419, "deleted": 1419}, {"file": ".github/workflows/dependabot-burner.lock.yml", "added": 2013, "deleted": 691}, {"file": ".github/workflows/security-alert-burndown.campaign.lock.yml", "added": 17, "deleted": 2228}, {"file": ".github/workflows/smoke-project.lock.yml", "added": 1836, "deleted": 400}]}, "workflows": {"total_workflows": 166, "workflow_lock_files": 149, "avg_workflow_size": 1014.3}, "docs": {"doc_files": 115, "doc_loc": 18147, "code_to_docs_ratio": 26.1}}, "quality_score": {"total": 67.55, "components": {"test_coverage": {"score": 24.9, "max": 30, "percentage": 83.0}, "code_organization": {"score": 20.87, "max": 25, "percentage": 83.5}, "documentation": {"score": 6.95, "max": 20, "percentage": 34.8}, "churn_stability": {"score": 4.82, "max": 15, "percentage": 32.2}, "comment_density": {"score": 10, "max": 10, "percentage": 100.0}}}, "trends": {}}
 {"date":"2026-02-04","timestamp":1770203093,"metrics":{"size":{"lines_of_code_total":582894,"total_files":1401,"by_language":{"Go":{"loc":387465,"files":1374,"percentage":66.5},"JavaScript":{"loc":1780,"files":7,"percentage":0.3},"TypeScript":{"loc":1633,"files":17,"percentage":0.3},"Python":{"loc":829,"files":3,"percentage":0.1},"Markdown":{"loc":149374,"files":597,"percentage":25.6},"Shell":{"loc":7518,"files":52,"percentage":1.3},"JSON":{"loc":34295,"files":41,"percentage":5.9}},"by_directory":[{"path":"pkg/workflow","loc":223043,"files":792,"percentage":38.3},{"path":"scratchpad","loc":32250,"files":49,"percentage":5.5},{"path":"docs/src/content/docs/reference","loc":16139,"files":31,"percentage":2.8},{"path":"docs/src/content/docs/blog","loc":4531,"files":27,"percentage":0.8},{"path":"docs/src/content/docs/guides","loc":4170,"files":19,"percentage":0.7},{"path":"scripts","loc":3435,"files":18,"percentage":0.6},{"path":"specs","loc":2508,"files":3,"percentage":0.4},{"path":"cmd/gh-aw","loc":1988,"files":7,"percentage":0.3},{"path":"docs/src/content/docs/setup","loc":994,"files":3,"percentage":0.2},{"path":"docs/src/content/docs/troubleshooting","loc":985,"files":2,"percentage":0.2}]},"quality":{"total_files":1401,"avg_file_size":279,"large_files_count":190,"function_count":6791,"comment_lines":42624,"comment_ratio":7.3},"tests":{"test_files":887,"test_lines_of_code":269988,"source_lines_of_code":121719,"test_to_source_ratio":2.22},"churn":{"commits_7d":425,"files_modified_7d":2035,"lines_added_7d":179315,"lines_deleted_7d":188331,"net_change_7d":-9016,"most_active_files":[{"file":".github/workflows/security-alert-burndown.lock.yml","changes":62},{"file":".github/workflows/dependabot-burner.lock.yml","changes":49},{"file":".github/workflows/poem-bot.lock.yml","changes":43},{"file":".github/workflows/smoke-copilot.lock.yml","changes":38},{"file":".github/workflows/release.lock.yml","changes":38},{"file":".github/workflows/scout.lock.yml","changes":36},{"file":".github/workflows/daily-multi-device-docs-tester.lock.yml","changes":36},{"file":".github/workflows/q.lock.yml","changes":35},{"file":".github/workflows/github-mcp-tools-report.lock.yml","changes":35},{"file":".github/workflows/daily-observability-report.lock.yml","changes":35}]},"workflows":{"total_workflows":206,"workflow_lock_files":145,"avg_workflow_size":650.5},"docs":{"doc_files":112,"doc_loc":31406,"code_to_docs_ratio":3.9}},"quality_score":{"total":85,"components":{"test_coverage":{"score":30,"max":30,"percentage":100},"code_organization":{"score":25,"max":25,"percentage":100},"documentation":{"score":20,"max":20,"percentage":100},"churn_stability":{"score":0,"max":15,"percentage":0},"comment_density":{"score":10,"max":10,"percentage":100}}},"trends":{"test_ratio_30d":-0.9}}
+{
+  "date": "2026-02-04",
+  "timestamp": 1770226328,
+  "metrics": {
+    "size": {
+      "lines_of_code_total": 541839,
+      "total_files": 10,
+      "by_language": {
+        "Other": {
+          "loc": 99106,
+          "files": 439
+        },
+        "Markdown": {
+          "loc": 65215,
+          "files": 367
+        },
+        "Go": {
+          "loc": 339713,
+          "files": 1376
+        },
+        "Shell": {
+          "loc": 6407,
+          "files": 51
+        },
+        "JSON": {
+          "loc": 26513,
+          "files": 26
+        },
+        "JavaScript": {
+          "loc": 1485,
+          "files": 7
+        },
+        "TypeScript": {
+          "loc": 1419,
+          "files": 17
+        },
+        "CSS": {
+          "loc": 1385,
+          "files": 1
+        },
+        "YAML": {
+          "loc": 487,
+          "files": 3
+        },
+        "Python": {
+          "loc": 109,
+          "files": 1
+        }
+      },
+      "by_directory": {
+        "test": {
+          "loc": 73,
+          "files": 1
+        },
+        "internal": {
+          "loc": 62,
+          "files": 2
+        },
+        "cmd": {
+          "loc": 1714,
+          "files": 7
+        },
+        "docs": {
+          "loc": 53356,
+          "files": 158
+        },
+        "pkg": {
+          "loc": 353948,
+          "files": 1569
+        }
+      }
+    },
+    "quality": {
+      "large_files": 138,
+      "total_source_files": 1401,
+      "avg_file_size": 244,
+      "function_count": 6717,
+      "comment_lines": 40630,
+      "comment_ratio": 0.1185,
+      "total_source_loc": 342726
+    },
+    "tests": {
+      "test_files": 898,
+      "test_lines_of_code": 239372,
+      "source_loc": 342726,
+      "test_to_source_ratio": 0.6984
+    },
+    "churn": {
+      "source": {
+        "files_modified": 2004,
+        "commits": 397,
+        "lines_added": 134209,
+        "lines_deleted": 128828,
+        "net_change": 5381
+      },
+      "lock_files": {
+        "files_modified": 155,
+        "lines_added": 38813,
+        "lines_deleted": 73016,
+        "net_change": -34203
+      }
+    },
+    "workflows": {
+      "total_workflows": 204,
+      "lock_files": 145,
+      "avg_workflow_size": 596,
+      "total_workflow_loc": 218137
+    },
+    "docs": {
+      "doc_files": 112,
+      "doc_loc": 23059,
+      "code_to_docs_ratio": 14.863
+    }
+  },
+  "quality_score": {
+    "total": 58.39,
+    "components": {
+      "test_coverage": {
+        "score": 10.48,
+        "max": 30,
+        "percentage": 34.9
+      },
+      "code_organization": {
+        "score": 22.91,
+        "max": 25,
+        "percentage": 91.7
+      },
+      "documentation": {
+        "score": 15,
+        "max": 20,
+        "percentage": 75.0
+      },
+      "churn_stability": {
+        "score": 0,
+        "max": 15,
+        "percentage": 0.0
+      },
+      "comment_density": {
+        "score": 10,
+        "max": 10,
+        "percentage": 100.0
+      }
+    }
+  },
+  "trends": {
+    "loc_7d": -26.84,
+    "test_ratio_7d": -68.82,
+    "quality_7d": -18.9,
+    "test_ratio_30d": -68.82
+  }
+}
