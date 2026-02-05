@@ -56,11 +56,10 @@ The command will:
   2. Apply relevant codemods to fix issues
   3. Report what was changed in each file
   4. Write updated files back to disk (with --write flag)
-  5. Update prompt and agent files to latest templates (similar to 'init' command)
-  6. Delete deprecated .github/aw/schemas/agentic-workflow.json file if it exists
-  7. Delete old template files from pkg/cli/templates/ (with --write flag)
-  8. Delete old .agent.md files that have been moved to .github/aw/ (with --write flag)
-  9. Delete .github/aw/*.md prompt files (now downloaded from GitHub) (with --write flag)
+  5. Delete deprecated .github/aw/schemas/agentic-workflow.json file if it exists
+  6. Delete old template files from pkg/cli/templates/ (with --write flag)
+  7. Delete old .agent.md files that have been moved to .github/aw/ (with --write flag)
+  8. Delete .github/aw/*.md prompt files (now downloaded from GitHub) (with --write flag)
 
 ` + WorkflowIDExplanation + `
 
@@ -183,58 +182,6 @@ func runFixCommand(workflowIDs []string, write bool, verbose bool, workflowDir s
 				})
 			}
 		}
-	}
-
-	// Update prompt and agent files (similar to init command)
-	// This ensures the latest templates are always used
-	fixLog.Print("Updating prompt and agent files")
-
-	// Update copilot instructions
-	if err := ensureCopilotInstructions(verbose, false); err != nil {
-		fixLog.Printf("Failed to update copilot instructions: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update copilot instructions: %v", err)))
-	}
-
-	// Update dispatcher agent
-	if err := ensureAgenticWorkflowsDispatcher(verbose, false); err != nil {
-		fixLog.Printf("Failed to update dispatcher agent: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update dispatcher agent: %v", err)))
-	}
-
-	// Update create workflow prompt
-	if err := ensureCreateWorkflowPrompt(verbose, false); err != nil {
-		fixLog.Printf("Failed to update create workflow prompt: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update workflow creation prompt: %v", err)))
-	}
-
-	// Update update workflow prompt
-	if err := ensureUpdateWorkflowPrompt(verbose, false); err != nil {
-		fixLog.Printf("Failed to update update workflow prompt: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update workflow update prompt: %v", err)))
-	}
-
-	// Update create shared agentic workflow prompt
-	if err := ensureCreateSharedAgenticWorkflowPrompt(verbose, false); err != nil {
-		fixLog.Printf("Failed to update create shared workflow prompt: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update shared workflow creation prompt: %v", err)))
-	}
-
-	// Update debug workflow prompt
-	if err := ensureDebugWorkflowPrompt(verbose, false); err != nil {
-		fixLog.Printf("Failed to update debug workflow prompt: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update debug workflow prompt: %v", err)))
-	}
-
-	// Update upgrade agentic workflows prompt
-	if err := ensureUpgradeAgenticWorkflowsPrompt(verbose, false); err != nil {
-		fixLog.Printf("Failed to update upgrade workflows prompt: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update upgrade workflow prompt: %v", err)))
-	}
-
-	// Update Serena tool documentation
-	if err := ensureSerenaTool(verbose, false); err != nil {
-		fixLog.Printf("Failed to update Serena tool documentation: %v", err)
-		fmt.Fprintf(os.Stderr, "%s\n", console.FormatWarningMessage(fmt.Sprintf("Warning: Failed to update Serena tool documentation: %v", err)))
 	}
 
 	// Delete old template files from pkg/cli/templates/ (only with --write)
