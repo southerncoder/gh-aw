@@ -18,12 +18,6 @@ tools:
   cache-memory: true
   timeout: 300
 
-steps:
-  - name: Download logs from last 24 hours
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    run: ./gh-aw logs --start-date -1d -o /tmp/gh-aw/aw-mcp/logs
-
 safe-outputs:
   create-issue:
     expires: 2d
@@ -37,6 +31,7 @@ strict: true
 imports:
   - shared/jqschema.md
   - shared/reporting.md
+  - shared/gh-aw-cli.md
 ---
 
 # Safe Output Tool Optimizer
@@ -59,22 +54,18 @@ Create issues to improve tool descriptions when the workflow prompt is correct b
 
 ## Analysis Process
 
-### Phase 0: Setup
-
-- DO NOT ATTEMPT TO USE GH AW DIRECTLY, it is not authenticated. Use the MCP server instead.
-- Do not attempt to download the `gh aw` extension or build it. If the MCP fails, give up.
-- Run the `status` tool of `gh-aw` MCP server to verify configuration.
-
 ### Phase 1: Collect Workflow Logs with Safe Output Errors
 
-The gh-aw binary has been built and configured as an MCP server. Use the MCP tools directly.
+**IMPORTANT**: You must download logs using the gh-aw-logs safe-input tool.
 
-1. **Download Logs with Safe Output Filter**:
-   Use the `logs` tool from the gh-aw MCP server:
-   - Workflow name: (leave empty to get all workflows)
-   - Count: Set high enough for 24 hours of activity (e.g., 100)
-   - Start date: "-1d" (last 24 hours)
-   - Safe output filter: Leave empty to get all runs, we'll analyze them
+1. **Download Logs from Last 24 Hours**:
+   
+   Use the gh-aw-logs safe-input tool:
+   ```
+   Use the gh-aw-logs tool with:
+   - start-date: "-1d"
+   - output-dir: "/tmp/gh-aw/aw-mcp/logs"
+   ```
    
    The logs will be downloaded to `/tmp/gh-aw/aw-mcp/logs` automatically.
 

@@ -29,7 +29,7 @@
 #     - shared/reporting.md
 #     - shared/trending-charts-simple.md
 #
-# frontmatter-hash: 4437e5b7a969ea10edf849328d76577f16c76f8cd535fdb1e588203b2bc6471a
+# frontmatter-hash: 0674b26862676988815dd54242a91e2dbc89b6d7d0bfa896927a2243efa6fd26
 
 name: "Copilot Agent Prompt Clustering Analysis"
 "on":
@@ -495,6 +495,49 @@ jobs:
                 "timeout": 60
               },
               {
+                "name": "gh-aw-compile",
+                "description": "Compile workflow files with optional static analysis. This tool builds the gh-aw binary and executes the 'gh-aw compile' command.",
+                "inputSchema": {
+                  "properties": {
+                    "actionlint": {
+                      "description": "Enable actionlint validation",
+                      "type": "boolean"
+                    },
+                    "no-emit": {
+                      "description": "Do not emit lock files (validation only)",
+                      "type": "boolean"
+                    },
+                    "output-file": {
+                      "description": "File to save compile output (optional)",
+                      "type": "string"
+                    },
+                    "poutine": {
+                      "description": "Enable poutine security scanning",
+                      "type": "boolean"
+                    },
+                    "strict": {
+                      "description": "Enable strict mode",
+                      "type": "boolean"
+                    },
+                    "workflow": {
+                      "description": "Workflow file to compile (optional - if not specified, compiles all workflows)",
+                      "type": "string"
+                    },
+                    "zizmor": {
+                      "description": "Enable zizmor security scanning",
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "handler": "gh-aw-compile.sh",
+                "env": {
+                  "GH_TOKEN": "GH_TOKEN",
+                  "GITHUB_TOKEN": "GITHUB_TOKEN"
+                },
+                "timeout": 60
+              },
+              {
                 "name": "gh-aw-logs",
                 "description": "Download and analyze GitHub Actions workflow logs. This tool builds the gh-aw binary and executes the 'gh-aw logs' command to download workflow run logs.",
                 "inputSchema": {
@@ -574,8 +617,61 @@ jobs:
           echo "Executing: ./gh-aw $ARGS"
           ./gh-aw $ARGS
           
+          
           EOFSH_gh-aw-audit
           chmod +x /opt/gh-aw/safe-inputs/gh-aw-audit.sh
+          cat > /opt/gh-aw/safe-inputs/gh-aw-compile.sh << 'EOFSH_gh-aw-compile'
+          #!/bin/bash
+          # Auto-generated safe-input tool: gh-aw-compile
+          # Compile workflow files with optional static analysis. This tool builds the gh-aw binary and executes the 'gh-aw compile' command.
+          
+          set -euo pipefail
+          
+          set -e
+          
+          # Build the gh-aw binary
+          echo "Building gh-aw binary..."
+          cd "$GITHUB_WORKSPACE"
+          make build
+          
+          # Prepare arguments
+          ARGS="compile"
+          
+          if [[ "$INPUT_ZIZMOR" == "true" ]]; then
+            ARGS="$ARGS --zizmor"
+          fi
+          
+          if [[ "$INPUT_POUTINE" == "true" ]]; then
+            ARGS="$ARGS --poutine"
+          fi
+          
+          if [[ "$INPUT_ACTIONLINT" == "true" ]]; then
+            ARGS="$ARGS --actionlint"
+          fi
+          
+          if [[ "$INPUT_NO_EMIT" == "true" ]]; then
+            ARGS="$ARGS --no-emit"
+          fi
+          
+          if [[ "$INPUT_STRICT" == "true" ]]; then
+            ARGS="$ARGS --strict"
+          fi
+          
+          if [[ -n "$INPUT_WORKFLOW" ]]; then
+            ARGS="$ARGS $INPUT_WORKFLOW"
+          fi
+          
+          # Execute gh-aw compile command
+          echo "Executing: ./gh-aw $ARGS"
+          
+          if [[ -n "$INPUT_OUTPUT_FILE" ]]; then
+            ./gh-aw $ARGS 2>&1 | tee "$INPUT_OUTPUT_FILE"
+          else
+            ./gh-aw $ARGS
+          fi
+          
+          EOFSH_gh-aw-compile
+          chmod +x /opt/gh-aw/safe-inputs/gh-aw-compile.sh
           cat > /opt/gh-aw/safe-inputs/gh-aw-logs.sh << 'EOFSH_gh-aw-logs'
           #!/bin/bash
           # Auto-generated safe-input tool: gh-aw-logs
@@ -1058,6 +1154,7 @@ jobs:
           
           1. **gh-aw-logs** - Download and analyze GitHub Actions workflow logs
           2. **gh-aw-audit** - Audit a specific workflow run
+          3. **gh-aw-compile** - Compile workflow files with optional static analysis
           
           ### Usage
           
@@ -1117,6 +1214,28 @@ jobs:
           Use the gh-aw-audit tool with:
           - run-id: "123456789"
           - output-dir: "/tmp/gh-aw/audit"
+          ```
+          
+          #### gh-aw-compile
+          
+          | Parameter | Type | Required | Description |
+          |-----------|------|----------|-------------|
+          | workflow | string | No | Workflow file to compile (if not specified, compiles all) |
+          | zizmor | boolean | No | Enable zizmor security scanning |
+          | poutine | boolean | No | Enable poutine security scanning |
+          | actionlint | boolean | No | Enable actionlint validation |
+          | no-emit | boolean | No | Do not emit lock files (validation only) |
+          | strict | boolean | No | Enable strict mode |
+          | output-file | string | No | File to save compile output |
+          
+          **Example usage:**
+          
+          ```
+          Use the gh-aw-compile tool with:
+          - zizmor: true
+          - poutine: true
+          - actionlint: true
+          - output-file: "/tmp/gh-aw/compile-output.txt"
           ```
           
           ### Important Notes

@@ -94,6 +94,84 @@ safe-inputs:
       # Execute gh-aw audit command
       echo "Executing: ./gh-aw $ARGS"
       ./gh-aw $ARGS
+
+  gh-aw-compile:
+    description: "Compile workflow files with optional static analysis. This tool builds the gh-aw binary and executes the 'gh-aw compile' command."
+    inputs:
+      workflow:
+        type: string
+        description: "Workflow file to compile (optional - if not specified, compiles all workflows)"
+        required: false
+      zizmor:
+        type: boolean
+        description: "Enable zizmor security scanning"
+        required: false
+      poutine:
+        type: boolean
+        description: "Enable poutine security scanning"
+        required: false
+      actionlint:
+        type: boolean
+        description: "Enable actionlint validation"
+        required: false
+      no-emit:
+        type: boolean
+        description: "Do not emit lock files (validation only)"
+        required: false
+      strict:
+        type: boolean
+        description: "Enable strict mode"
+        required: false
+      output-file:
+        type: string
+        description: "File to save compile output (optional)"
+        required: false
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    run: |
+      set -e
+      
+      # Build the gh-aw binary
+      echo "Building gh-aw binary..."
+      cd "$GITHUB_WORKSPACE"
+      make build
+      
+      # Prepare arguments
+      ARGS="compile"
+      
+      if [[ "$INPUT_ZIZMOR" == "true" ]]; then
+        ARGS="$ARGS --zizmor"
+      fi
+      
+      if [[ "$INPUT_POUTINE" == "true" ]]; then
+        ARGS="$ARGS --poutine"
+      fi
+      
+      if [[ "$INPUT_ACTIONLINT" == "true" ]]; then
+        ARGS="$ARGS --actionlint"
+      fi
+      
+      if [[ "$INPUT_NO_EMIT" == "true" ]]; then
+        ARGS="$ARGS --no-emit"
+      fi
+      
+      if [[ "$INPUT_STRICT" == "true" ]]; then
+        ARGS="$ARGS --strict"
+      fi
+      
+      if [[ -n "$INPUT_WORKFLOW" ]]; then
+        ARGS="$ARGS $INPUT_WORKFLOW"
+      fi
+      
+      # Execute gh-aw compile command
+      echo "Executing: ./gh-aw $ARGS"
+      
+      if [[ -n "$INPUT_OUTPUT_FILE" ]]; then
+        ./gh-aw $ARGS 2>&1 | tee "$INPUT_OUTPUT_FILE"
+      else
+        ./gh-aw $ARGS
+      fi
 ---
 
 ## gh-aw CLI Safe Input Tools
@@ -104,6 +182,7 @@ This shared workflow provides safe-input tools for executing gh-aw CLI commands 
 
 1. **gh-aw-logs** - Download and analyze GitHub Actions workflow logs
 2. **gh-aw-audit** - Audit a specific workflow run
+3. **gh-aw-compile** - Compile workflow files with optional static analysis
 
 ### Usage
 
@@ -163,6 +242,28 @@ Use the gh-aw-logs tool with:
 Use the gh-aw-audit tool with:
 - run-id: "123456789"
 - output-dir: "/tmp/gh-aw/audit"
+```
+
+#### gh-aw-compile
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| workflow | string | No | Workflow file to compile (if not specified, compiles all) |
+| zizmor | boolean | No | Enable zizmor security scanning |
+| poutine | boolean | No | Enable poutine security scanning |
+| actionlint | boolean | No | Enable actionlint validation |
+| no-emit | boolean | No | Do not emit lock files (validation only) |
+| strict | boolean | No | Enable strict mode |
+| output-file | string | No | File to save compile output |
+
+**Example usage:**
+
+```
+Use the gh-aw-compile tool with:
+- zizmor: true
+- poutine: true
+- actionlint: true
+- output-file: "/tmp/gh-aw/compile-output.txt"
 ```
 
 ### Important Notes

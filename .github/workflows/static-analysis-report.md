@@ -26,6 +26,7 @@ timeout-minutes: 45
 strict: true
 imports:
   - shared/reporting.md
+  - shared/gh-aw-cli.md
 steps:
   - name: Pull static analysis Docker images
     run: |
@@ -55,17 +56,6 @@ steps:
       docker run --rm ghcr.io/boostsecurityio/poutine:latest --version || echo "Warning: poutine version check failed"
       
       echo "Static analysis tools verification complete"
-  - name: Run compile with security tools
-    run: |
-      set -e
-      echo "Running gh aw compile with security tools to download Docker images..."
-      
-      # Run compile with all security scanner flags to download Docker images
-      # Store the output in a file for inspection
-      ./gh-aw compile --zizmor --poutine --actionlint 2>&1 | tee /tmp/gh-aw/compile-output.txt
-      
-      echo "Compile with security tools completed"
-      echo "Output saved to /tmp/gh-aw/compile-output.txt"
 ---
 
 # Static Analysis Report
@@ -84,13 +74,23 @@ Daily scan all agentic workflow files with static analysis tools to identify sec
 
 ### Phase 0: Setup
 
-- All workflows have already been compiled with static analysis tools in previous steps
-- The compilation output is available at `/tmp/gh-aw/compile-output.txt`
-- You should read and analyze this file directly instead of running additional compilations
+**IMPORTANT**: You must run the gh-aw compile command using the gh-aw-compile safe-input tool.
+
+All workflows need to be compiled with static analysis tools first:
+
+```
+Use the gh-aw-compile tool with:
+- zizmor: true
+- poutine: true
+- actionlint: true
+- output-file: "/tmp/gh-aw/compile-output.txt"
+```
+
+This will compile all workflows with all three static analysis tools and save the output to `/tmp/gh-aw/compile-output.txt`.
 
 ### Phase 1: Analyze Static Analysis Output
 
-The workflow has already compiled all workflows with static analysis tools (zizmor, poutine, actionlint) and saved the output to `/tmp/gh-aw/compile-output.txt`.
+After running the compile command, read and analyze the output from `/tmp/gh-aw/compile-output.txt`.
 
 1. **Read Compilation Output**:
    Read and parse the file `/tmp/gh-aw/compile-output.txt` which contains the JSON output from the compilation with all three static analysis tools.
