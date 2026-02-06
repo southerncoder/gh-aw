@@ -124,6 +124,20 @@ The YAML frontmatter supports these fields:
   - Values limited to 1024 characters
   - Example: `metadata: { team: "platform", priority: "high" }`
 - **`github-token:`** - Default GitHub token for workflow (must use `${{ secrets.* }}` syntax)
+- **`plugins:`** - Plugins to install before workflow execution (array or object)
+  - Array format: `plugins: [github/test-plugin, acme/custom-tools]`
+  - Object format with custom token:
+    ```yaml
+    plugins:
+      repos: [github/test-plugin, acme/custom-tools]
+      github-token: ${{ secrets.CUSTOM_PLUGIN_TOKEN }}
+    ```
+  - Plugins are installed using engine-specific CLI commands
+  - Token precedence: `plugins.github-token` > `github-token` > `GH_AW_PLUGINS_TOKEN` > `GH_AW_GITHUB_TOKEN` > `GITHUB_TOKEN`
+- **`payload-dir:`** - Directory path for sharing large MCP response payloads between agent and gateway containers (string)
+  - Defaults to `/tmp/gh-aw/mcp-payload`
+  - Mounted read-only in agent container, read-write in MCP gateway container
+  - Enables efficient sharing of large tool responses without token overhead
 - **`roles:`** - Repository access roles that can trigger workflow (array or "all")
   - Default: `[admin, maintainer, write]`
   - Available roles: `admin`, `maintainer`, `write`, `read`, `all`
