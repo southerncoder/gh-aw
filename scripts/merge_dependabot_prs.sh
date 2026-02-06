@@ -33,7 +33,7 @@ if [ -z "$GH_TOKEN" ]; then
 fi
 
 # Change to repo root
-cd "$(git rev-path --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)"
 
 echo "📋 Review Summary:"
 echo "  - PR #13784: fast-xml-parser 5.3.3 → 5.3.4 (patch)"
