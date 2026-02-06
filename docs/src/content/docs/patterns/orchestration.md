@@ -37,4 +37,4 @@ If your workers need shared context, pass an explicit input such as `tracker_id`
 - Set conservative `max` limits on dispatch to prevent accidental fan-out.
 - Prefer Projects + status updates for **monitoring** over ad-hoc labels.
 
-See also: [/patterns/monitoring/](/gh-aw/patterns/monitoring/)
+See also: [/patterns/projectops/](/gh-aw/patterns/projectops/)

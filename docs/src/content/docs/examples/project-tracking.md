@@ -227,11 +227,11 @@ Use for progress reports, milestone summaries, or workflow health indicators.
 
 ## How this fits
 
-- **Projects & Monitoring:** Use `update-project` to track work items and `create-project-status-update` to publish run summaries.
+- **ProjectOps:** Use `update-project` to track work items and `create-project-status-update` to publish run summaries.
 - **Orchestration:** An orchestrator can dispatch workers and use the same project safe-outputs to keep a shared board updated.
 
 See:
-- [Projects & Monitoring](/gh-aw/patterns/monitoring/)
+- [ProjectOps](/gh-aw/patterns/projectops/)
 - [Orchestration](/gh-aw/patterns/orchestration/)
 
 ## Common Patterns
@@ -324,5 +324,5 @@ Update the project item with the team field.
 - [update-project](/gh-aw/reference/safe-outputs/#project-board-updates-update-project) - Detailed update-project configuration
 - [create-project-status-update](/gh-aw/reference/safe-outputs/#project-status-updates-create-project-status-update) - Status update configuration
 - [GitHub Projects V2 Tokens](/gh-aw/reference/tokens/#gh_aw_project_github_token-github-projects-v2) - Token setup guide
-- [Projects & Monitoring](/gh-aw/patterns/monitoring/) - Design pattern guide
+- [ProjectOps](/gh-aw/patterns/projectops/) - Design pattern guide
 - [Orchestration](/gh-aw/patterns/orchestration/) - Design pattern guide

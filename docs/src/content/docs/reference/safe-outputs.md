@@ -451,7 +451,7 @@ Optionally include `item_url` (GitHub issue URL) to add the issue as the first p
 > - **Fine-grained PAT**: Organization permissions → Projects: Read & Write
 
 > [!NOTE]
-> You can configure views directly during project creation using the `views` field (see above), or later using `update-project` to add custom fields and additional views. For pattern guidance, see [Projects & Monitoring](/gh-aw/patterns/monitoring/).
+> You can configure views directly during project creation using the `views` field (see above), or later using `update-project` to add custom fields and additional views. For pattern guidance, see [ProjectOps](/gh-aw/patterns/projectops/).
 
 ### Project Board Updates (`update-project:`)
 
@@ -1350,7 +1350,7 @@ Common combinations:
 - **Orchestration:** `dispatch-workflow` (orchestrator/worker pattern), optionally paired with Projects updates
 
 See:
-- [Projects & Monitoring](/gh-aw/patterns/monitoring/)
+- [ProjectOps](/gh-aw/patterns/projectops/)
 - [Orchestration](/gh-aw/patterns/orchestration/)
 
 ## Custom Messages (`messages:`)

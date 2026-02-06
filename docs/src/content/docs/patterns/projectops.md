@@ -1,6 +1,6 @@
 ---
 title: ProjectOps
-description: Automate GitHub Projects board management with AI-powered workflows (triage, routing, and field updates)
+description: Automate GitHub Projects board management with AI-powered workflows (triage, routing, field updates, and monitoring)
 sidebar:
   badge: { text: 'Event-triggered', variant: 'success' }
 ---
@@ -10,6 +10,15 @@ ProjectOps automates [GitHub Projects](https://docs.github.com/en/issues/plannin
 When a new issue or pull request arrives, the agent analyzes it and determines where it belongs, what status to set, which fields to update (priority, effort, etc.), and whether to create or update project structures.
 
 Safe outputs handle all project operations in separate, scoped jobs with minimal permissions—the agent job never sees the Projects token, ensuring secure automation.
+
+## Pattern Overview
+
+ProjectOps combines two complementary aspects:
+
+- **Projects** are the dashboard: a GitHub Projects v2 board holds issues/PRs and custom fields
+- **Monitoring** is the behavior: workflows continuously add/update items, and periodically post status updates
+
+Use this pattern when you want a durable "source of truth" for what your agentic workflows discovered, decided, and did.
 
 ## Prerequisites
 
@@ -120,6 +129,30 @@ Each safe output operates in a separate job with minimal, scoped permissions. Se
 
 See the [Safe Outputs reference](/gh-aw/reference/safe-outputs/#project-board-updates-update-project) for project field and view configuration.
 
+## Monitoring and Tracking
+
+ProjectOps workflows can serve as a monitoring system by maintaining a project board that tracks workflow activity and progress.
+
+### Correlate work with Tracker ID
+
+To correlate multiple workflow runs or coordinate across workflows, add a custom **Tracker Id** field (text type) to your project board and populate it from your workflow prompt or output. This enables:
+
+- Linking related issues/PRs across multiple workflow runs
+- Tracking progress of multi-step initiatives
+- Coordinating work between orchestrator and worker workflows
+
+**Example**: Use a run ID, issue number, or initiative key as the tracker ID to group related work items.
+
+### Operational Monitoring with CLI Tools
+
+Monitor your ProjectOps workflows and diagnose issues using the gh-aw CLI:
+
+- `gh aw status` - See which workflows are enabled and their latest run state
+- `gh aw logs` - Download and analyze workflow logs for debugging
+- `gh aw audit` - Inspect tool usage, errors, MCP failures, and network patterns
+
+See the [CLI Commands reference](/gh-aw/setup/cli/) for complete details.
+
 ## When to Use ProjectOps
 
 ProjectOps complements [GitHub's built-in Projects automation](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations) with AI-powered intelligence:
@@ -165,8 +198,7 @@ ProjectOps complements [GitHub's built-in Projects automation](https://docs.gith
 ## Additional Resources
 
 - [Safe Outputs Reference](/gh-aw/reference/safe-outputs/) - Complete safe output configuration and API details
-- [Projects & Monitoring](/gh-aw/patterns/monitoring/) - Design pattern guide
-- [Orchestration](/gh-aw/patterns/orchestration/) - Design pattern guide
+- [Orchestration](/gh-aw/patterns/orchestration/) - Design pattern guide for coordinating multiple workflows
 - [Trigger Events](/gh-aw/reference/triggers/) - Event trigger configuration options
 - [IssueOps](/gh-aw/patterns/issueops/) - Related issue automation patterns
 - [Token Reference](/gh-aw/reference/tokens/#gh_aw_project_github_token-github-projects-v2) - GitHub Projects token setup
