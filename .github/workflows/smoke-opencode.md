@@ -15,7 +15,7 @@ permissions:
   
 name: Smoke OpenCode
 plugins:
-  - anthropics/claude-code
+  - anthropics/claude-code/plugins/explanatory-output-style
 imports:
   - shared/opencode.md
   - shared/gh.md

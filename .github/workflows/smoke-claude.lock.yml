@@ -31,7 +31,7 @@
 #     - shared/mcp/tavily.md
 #     - shared/reporting.md
 #
-# frontmatter-hash: 79ca466b4cb54ff771714f9c9f8810b3afd8b06b11549231951fe66cda5a5dd2
+# frontmatter-hash: 473fcdd15b69df94d597c84f0f8d300ff892519984a5837c676fd4a83144cfb5
 
 name: "Smoke Claude"
 "on":
@@ -232,10 +232,10 @@ jobs:
         run: bash /opt/gh-aw/actions/install_awf_binary.sh v0.13.12
       - name: Install Claude Code CLI
         run: npm install -g --silent @anthropic-ai/claude-code@2.1.34
-      - name: 'Install plugin: anthropics/claude-code'
+      - name: 'Install plugin: anthropics/claude-code/plugins/explanatory-output-style'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_AW_PLUGINS_TOKEN || secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
-        run: claude plugin install anthropics/claude-code
+        run: claude plugin install anthropics/claude-code/plugins/explanatory-output-style
       - name: Determine automatic lockdown mode for GitHub MCP server
         id: determine-automatic-lockdown
         env:

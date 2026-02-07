@@ -27,7 +27,7 @@
 #     - shared/github-queries-safe-input.md
 #     - shared/reporting.md
 #
-# frontmatter-hash: 97ed96f0dace6514eb74ca1331579b7e8e8ad656254dce2d815b906021789197
+# frontmatter-hash: 8e255fd1a453e5db4695257f01d5368dc6d249ab22a41dc7fa885b7a9135e07f
 
 name: "Smoke Copilot"
 "on":
@@ -222,10 +222,10 @@ jobs:
         run: /opt/gh-aw/actions/install_copilot_cli.sh 0.0.405
       - name: Install awf binary
         run: bash /opt/gh-aw/actions/install_awf_binary.sh v0.13.12
-      - name: 'Install plugin: anthropics/claude-code'
+      - name: 'Install plugin: anthropics/claude-code/plugins/explanatory-output-style'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_AW_PLUGINS_TOKEN || secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
-        run: copilot plugin install anthropics/claude-code
+        run: copilot plugin install anthropics/claude-code/plugins/explanatory-output-style
       - name: Determine automatic lockdown mode for GitHub MCP server
         id: determine-automatic-lockdown
         env:

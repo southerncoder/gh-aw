@@ -21,7 +21,7 @@
 #
 # Smoke test to validate common development tools are available in the agent container
 #
-# frontmatter-hash: 3b06a7ddc9a2912bc2daa463763d6a74d877d206a25b916dec7ba11ea6868ec6
+# frontmatter-hash: 751749c1e89d903e362e78c316a5573962c7bb145a0e9eb95ce04ab7496cb8dd
 
 name: "Agent Container Smoke Test"
 "on":
@@ -175,10 +175,10 @@ jobs:
         run: /opt/gh-aw/actions/install_copilot_cli.sh 0.0.405
       - name: Install awf binary
         run: bash /opt/gh-aw/actions/install_awf_binary.sh v0.13.12
-      - name: 'Install plugin: anthropics/claude-code'
+      - name: 'Install plugin: anthropics/claude-code/plugins/explanatory-output-style'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_AW_PLUGINS_TOKEN || secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
-        run: copilot plugin install anthropics/claude-code
+        run: copilot plugin install anthropics/claude-code/plugins/explanatory-output-style
       - name: Determine automatic lockdown mode for GitHub MCP server
         id: determine-automatic-lockdown
         env:
