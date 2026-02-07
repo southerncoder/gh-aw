@@ -72,6 +72,10 @@ test-integration-mcp-playwright:
 test-integration-mcp-other:
 	go test -v -timeout=3m -tags 'integration' -run 'TestMCPAdd|TestMCPInspectGitHub|TestMCPServer|TestMCPConfig' ./pkg/cli
 
+.PHONY: test-integration-mcp-gateway-inspect
+test-integration-mcp-gateway-inspect:
+	go test -v -timeout=3m -tags 'integration' -run 'TestMCPGatewayInspect' ./pkg/cli
+
 .PHONY: test-integration-logs
 test-integration-logs:
 	go test -v -timeout=3m -tags 'integration' -run 'TestLogs|TestFirewall|TestNoStopTime|TestLocalWorkflow' ./pkg/cli
