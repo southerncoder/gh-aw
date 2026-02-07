@@ -1,38 +1,36 @@
-# PR Triage Summary - 2026-02-07
+# PR Triage Summary - February 7, 2026
+
+**Run ID:** 21779908520  
+**Timestamp:** 2026-02-07 12:14 UTC  
+**Total PRs Triaged:** 13
 
 ## Quick Stats
 
-- **Total PRs:** 5
-- **Fast-track:** 1 (PR #14293)
-- **Batch review:** 2 (PRs #14289, #14292)
-- **Defer:** 2 (PRs #14227, #14294)
+- **Fast-track:** 2 PRs (#14323, #14325)
+- **Batch Review:** 7 PRs across 3 batches
+- **Deferred:** 4 PRs (low priority)
+- **Average Priority:** 47/100 (medium)
+- **CI Health:** 15% passing (CI instability affecting most PRs)
 
-## Priority Order
+## Top Actions
 
-1. **PR #14293** (63) - Bug fix: update-project deduplication
-2. **PR #14292** (56) - Refactor: entity cleanup orchestration
-3. **PR #14289** (47) - Refactor: simplify dependabot instructions
-4. **PR #14294** (43) - Docs: orchestration analysis
-5. **PR #14227** (32) - Chore: dependabot review docs
+1. **Merge #14323 once CI passes** - Critical project board bug fix (Priority: 72)
+2. **Review and merge #14325** - High-quality docs consolidation, CI passing (Priority: 46)
+3. **Schedule code quality batch review** - PRs #14312, #14313, #14301
+4. **Investigate CI instability** - 85% of PRs affected
 
-## Actions Needed
+## Batches Created
 
-### Immediate
-- Monitor PR #14293 for CI resolution and draft removal → fast-track
-
-### This Week
-- Schedule batch review for PRs #14289 + #14292
-- Investigate CI instability (all PRs affected)
-
-### Deferred
-- PR #14227: Wait for author to mark ready
-- PR #14294: Schedule architectural discussion
+- `batch-code-quality-001`: Code quality and test improvements (3 PRs)
+- `batch-workflow-improvements-001`: Workflow configuration updates (3 PRs)
+- `batch-refactor-001`: Code deduplication (1 PR)
 
 ## Key Insights
 
-- **Activity Spike:** 4 new PRs in last hour (vs. 1 PR in previous 6 hours)
-- **Quality Good:** Average quality score 14.8/20
-- **CI Issues:** 0% passing CI currently (all "unstable")
-- **Draft Heavy:** 80% in draft (normal for active development)
+- Fresh morning workflow run created 8 new PRs
+- Multiple high-quality refactoring PRs addressing tech debt
+- CI instability is primary blocker for progression
+- Documentation consolidation PR (#14325) is standout quality
 
-Last updated: 2026-02-07T06:19:12Z
+---
+*Next triage scheduled: 2026-02-07 18:14 UTC*
