@@ -12,6 +12,8 @@ permissions:
   pull-requests: read
 name: Agent Container Smoke Test
 engine: copilot
+plugins:
+  - anthropics/claude-code
 strict: true
 runtimes:
   node:

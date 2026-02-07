@@ -18,6 +18,8 @@ name: Smoke Claude
 engine:
   id: claude
   max-turns: 15
+plugins:
+  - anthropics/claude-code
 strict: true
 imports:
   - shared/mcp-pagination.md

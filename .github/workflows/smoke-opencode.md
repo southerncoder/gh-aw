@@ -14,6 +14,8 @@ permissions:
   discussions: read
   
 name: Smoke OpenCode
+plugins:
+  - anthropics/claude-code
 imports:
   - shared/opencode.md
   - shared/gh.md

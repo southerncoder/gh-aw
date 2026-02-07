@@ -14,6 +14,8 @@ permissions:
   discussions: read
 name: Smoke Codex
 engine: codex
+plugins:
+  - anthropics/claude-code
 strict: true
 imports:
   - shared/gh.md
