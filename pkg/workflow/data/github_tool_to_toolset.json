@@ -22,6 +22,7 @@
   "search_issues": "issues",
   "add_reaction": "issues",
   "create_issue_comment": "issues",
+  "add_issue_comment": "issues",
 
   "pull_request_read": "pull_requests",
   "list_pull_requests": "pull_requests",
