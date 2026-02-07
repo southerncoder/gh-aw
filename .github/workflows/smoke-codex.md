@@ -13,8 +13,6 @@ permissions:
   pull-requests: read
 name: Smoke Codex
 engine: codex
-plugins:
-  - explanatory-output-style@claude-plugins-official
 strict: true
 imports:
   - shared/mood.md

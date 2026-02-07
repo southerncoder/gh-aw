@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/github/gh-aw/pkg/logger"
 )
@@ -49,12 +50,55 @@ func GeneratePluginInstallationSteps(plugins []string, engineID string, githubTo
 
 	// Generate installation steps for each plugin
 	for _, plugin := range plugins {
+		// Validate plugin compatibility with engine
+		if err := validatePluginForEngine(plugin, engineID); err != nil {
+			pluginInstallLog.Printf("Skipping incompatible plugin: %v", err)
+			continue
+		}
+
 		step := generatePluginInstallStep(plugin, engineID, effectiveToken)
 		steps = append(steps, step)
 		pluginInstallLog.Printf("Generated plugin install step: plugin=%s, engine=%s", plugin, engineID)
 	}
 
 	return steps
+}
+
+// validatePluginForEngine validates that a plugin is compatible with the given engine.
+// Returns an error if the plugin uses a marketplace format that is incompatible with the engine.
+func validatePluginForEngine(plugin string, engineID string) error {
+	// Codex engine does not support plugin install command at all - it uses MCP servers instead
+	if engineID == "codex" {
+		return fmt.Errorf("Codex engine does not support plugin install command - use MCP servers (codex mcp add) instead for plugin: %s", plugin)
+	}
+
+	// Check for marketplace syntax: plugin-name@marketplace
+	if strings.Contains(plugin, "@") {
+		parts := strings.Split(plugin, "@")
+		if len(parts) == 2 {
+			marketplace := parts[1]
+
+			// Validate marketplace compatibility
+			switch marketplace {
+			case "claude-plugins-official":
+				// Claude marketplace plugins only work with Claude engine
+				if engineID != "claude" {
+					return fmt.Errorf("plugin %s uses Claude marketplace (@claude-plugins-official) which is not supported by %s engine", plugin, engineID)
+				}
+			case "copilot-plugins-official":
+				// Copilot marketplace plugins only work with Copilot engine
+				if engineID != "copilot" {
+					return fmt.Errorf("plugin %s uses Copilot marketplace (@copilot-plugins-official) which is not supported by %s engine", plugin, engineID)
+				}
+			// Add more marketplace validations as needed
+			default:
+				// Unknown marketplace - log warning but allow it
+				pluginInstallLog.Printf("Warning: unknown plugin marketplace '%s' for plugin %s", marketplace, plugin)
+			}
+		}
+	}
+
+	return nil
 }
 
 // generatePluginInstallStep generates a single GitHub Actions step to install a plugin.
@@ -66,11 +110,13 @@ func generatePluginInstallStep(plugin, engineID, githubToken string) GitHubActio
 	case "copilot":
 		command = fmt.Sprintf("copilot plugin install %s", plugin)
 	case "claude":
-		// TODO: validate the correct claude CLI plugin install command syntax
 		command = fmt.Sprintf("claude plugin install %s", plugin)
 	case "codex":
-		// TODO: validate the correct codex CLI plugin install command syntax
-		command = fmt.Sprintf("codex plugin install %s", plugin)
+		// Codex CLI does not support plugin install command
+		// Codex uses MCP servers (codex mcp add) instead of plugins
+		// This should have been caught by validation, but provide a clear error if reached
+		pluginInstallLog.Printf("ERROR: Codex engine does not support 'plugin install' command - use MCP servers instead")
+		command = fmt.Sprintf("echo 'ERROR: Codex does not support plugin install. Use MCP servers (codex mcp add) instead.' && exit 1")
 	default:
 		// For unknown engines, use a generic format
 		command = fmt.Sprintf("%s plugin install %s", engineID, plugin)
