@@ -658,6 +658,218 @@ To validate the AI-native approach:
 
 ---
 
+## UX Improvement: Streamlined Workflow Authoring
+
+### Current Pain Points
+
+Workflow authors currently face several challenges:
+1. **Repetitive lookup** - Must search through existing workflows to find safe-output usage examples
+2. **Copy-paste inconsistency** - Examples get copied and adapted, leading to drift
+3. **Discovery difficulty** - Hard to find which safe-outputs exist and what they do
+4. **Time-consuming** - Writing workflows from scratch requires significant research
+
+### Proposed Solution: Safe-Output Reference Catalog
+
+Create a **centralized, searchable catalog** of all safe-output types with copy-ready examples.
+
+#### Implementation Options
+
+**Option 1: Interactive CLI Tool**
+```bash
+# Browse available safe-outputs
+gh aw safe-outputs list
+
+# Get documentation and examples
+gh aw safe-outputs show create-issue
+
+# Generate boilerplate for workflow
+gh aw safe-outputs scaffold create-issue > workflow.md
+```
+
+**Benefits:**
+- ✅ Fast lookup from terminal
+- ✅ Can be piped directly into files
+- ✅ Tab completion for discoverability
+
+**Option 2: Documentation Website with Search**
+
+Create a searchable reference at `docs/safe-outputs/`:
+- `docs/safe-outputs/index.md` - Overview and search
+- `docs/safe-outputs/create-issue.md` - Individual pages per safe-output
+- `docs/safe-outputs/examples/` - Full workflow examples
+
+**Benefits:**
+- ✅ Visual browsing experience
+- ✅ Copy buttons for examples
+- ✅ Searchable with full-text search
+- ✅ Can include screenshots/diagrams
+
+**Option 3: IDE Integration (VS Code Extension)**
+
+Create a VS Code extension that provides:
+- IntelliSense for safe-output configuration
+- Snippets for common patterns
+- Inline documentation on hover
+- Quick actions to insert examples
+
+**Benefits:**
+- ✅ Context-aware suggestions
+- ✅ Zero context switching
+- ✅ Real-time validation
+- ✅ Best developer experience
+
+**Option 4: In-Repo Markdown Reference**
+
+Create `.github/aw/safe-outputs/` directory with one file per safe-output:
+```
+.github/aw/safe-outputs/
+├── README.md           # Index with links
+├── create-issue.md     # Full documentation
+├── create-pull-request.md
+├── update-project.md
+└── ...
+```
+
+**Benefits:**
+- ✅ Always accessible in the repository
+- ✅ Version controlled with code
+- ✅ Easy to contribute improvements
+- ✅ Works offline
+
+#### Recommended Approach: Multi-Channel
+
+Implement **all four options** with shared content source:
+
+1. **Source of truth**: Markdown files in `.github/aw/safe-outputs/`
+2. **CLI tool**: Reads from local `.github/aw/safe-outputs/` or fetches from GitHub
+3. **Docs website**: Generated from `.github/aw/safe-outputs/` markdown files
+4. **VS Code extension**: Bundles compiled content from markdown files
+
+This provides:
+- Single source of truth (easy maintenance)
+- Multiple access methods (better UX)
+- Consistent information (no drift)
+- Flexible consumption (CLI, web, IDE)
+
+### Example User Workflow
+
+**Before (Current State):**
+```bash
+# Author wants to create an issue from their workflow
+# 1. Search through .github/workflows/ for examples (2-5 minutes)
+# 2. Find a workflow that creates issues
+# 3. Copy the configuration and instructions (1-2 minutes)
+# 4. Adapt to their use case (3-5 minutes)
+# Total: 6-12 minutes per safe-output
+```
+
+**After (With Reference Catalog):**
+```bash
+# Option A: CLI
+gh aw safe-outputs scaffold create-issue >> my-workflow.md
+# 30 seconds
+
+# Option B: Docs
+# 1. Visit docs/safe-outputs/create-issue
+# 2. Click "Copy example" button
+# 3. Paste into workflow
+# 1 minute
+
+# Option C: VS Code
+# 1. Type "safe-outputs:"
+# 2. IntelliSense suggests "create-issue"
+# 3. Tab to insert template
+# 30 seconds
+```
+
+**Time savings**: 5-11 minutes per safe-output × multiple safe-outputs per workflow = **30-60 minutes saved per workflow**
+
+### Content Structure for Each Safe-Output
+
+Each safe-output reference should include:
+
+```markdown
+# Safe-Output: create-issue
+
+## Quick Start
+[Copy-ready minimal example]
+
+## Description
+[What this safe-output does in 1-2 sentences]
+
+## When to Use
+- [Use case 1]
+- [Use case 2]
+- [Use case 3]
+
+## Configuration
+[YAML frontmatter example with all options]
+
+## Examples
+
+### Example 1: Basic Usage
+[Minimal working example]
+
+### Example 2: Common Pattern
+[Frequently used pattern]
+
+### Example 3: Advanced Usage
+[Complex scenario with multiple features]
+
+## Parameters
+[Table of all parameters with types, required/optional, defaults]
+
+## Related Safe-Outputs
+[Links to related safe-outputs]
+
+## Troubleshooting
+[Common issues and solutions]
+
+## Full Workflow Example
+[Complete workflow.md file using this safe-output]
+```
+
+### Implementation Priority
+
+**Phase 1 (Week 1-2):** Foundation
+- [ ] Create `.github/aw/safe-outputs/` directory structure
+- [ ] Document top 10 safe-outputs (covering 80% of usage)
+- [ ] Create README with index and search instructions
+
+**Phase 2 (Week 3-4):** CLI Tool
+- [ ] Build `gh aw safe-outputs` command
+- [ ] Implement `list`, `show`, `scaffold` subcommands
+- [ ] Add tab completion
+
+**Phase 3 (Week 5-6):** Documentation Website
+- [ ] Set up docs site generation from markdown
+- [ ] Add search functionality
+- [ ] Deploy to docs.github.com or GitHub Pages
+
+**Phase 4 (Month 2):** IDE Integration
+- [ ] Create VS Code extension skeleton
+- [ ] Implement IntelliSense and snippets
+- [ ] Bundle documentation content
+- [ ] Publish to VS Code marketplace
+
+### Success Metrics
+
+Track these metrics to measure UX improvement:
+
+1. **Time to author workflow** - Measure time from start to first successful run
+2. **Documentation lookups** - Track `gh aw safe-outputs show` usage
+3. **Copy-paste errors** - Monitor workflow failures due to misconfiguration
+4. **Workflow consistency** - Measure similarity in safe-output usage patterns
+5. **Developer satisfaction** - Survey workflow authors on ease of use
+
+**Target improvements:**
+- 50% reduction in time to author workflow
+- 70% reduction in safe-output misconfiguration errors
+- 90% consistency in safe-output usage patterns
+- 4.5/5 average satisfaction score
+
+---
+
 **Analysis Generated:** 2026-02-08  
 **Repository:** github/gh-aw  
 **Analyzer:** Workflow Analysis Script v1.0
