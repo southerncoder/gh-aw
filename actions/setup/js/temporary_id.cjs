@@ -169,7 +169,7 @@ function loadTemporaryIdMapFromResolved(resolvedTemporaryIds) {
  * Resolve an issue number that may be a temporary ID or an actual issue number
  * Returns structured result with the resolved number, repo, and metadata
  * @param {any} value - The value to resolve (can be temporary ID, number, or string)
- * @param {Map<string, any>} temporaryIdMap - Map of temporary ID to resolved value (supports legacy formats)
+ * @param {Map<string, any>|Object<string, any>} temporaryIdMap - Map or object of temporary ID to resolved value
  * @returns {{resolved: RepoIssuePair|null, wasTemporaryId: boolean, errorMessage: string|null}}
  */
 function resolveIssueNumber(value, temporaryIdMap) {
@@ -183,7 +183,9 @@ function resolveIssueNumber(value, temporaryIdMap) {
 
   // Check if it's a temporary ID
   if (isTemporaryId(valueWithoutHash)) {
-    const resolvedPair = temporaryIdMap.get(normalizeTemporaryId(valueWithoutHash));
+    // Support both Map and plain object
+    const normalizedId = normalizeTemporaryId(valueWithoutHash);
+    const resolvedPair = temporaryIdMap instanceof Map ? temporaryIdMap.get(normalizedId) : temporaryIdMap[normalizedId];
     if (resolvedPair !== undefined) {
       // Support legacy format where the map value is the issue number.
       const contextRepo = typeof context !== "undefined" ? `${context.repo.owner}/${context.repo.repo}` : "";

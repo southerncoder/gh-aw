@@ -320,11 +320,10 @@ async function main(config = {}, githubClient = null) {
   /**
    * Message handler function that processes a single create_project message
    * @param {Object} message - The create_project message to process
-   * @param {Map<string, {repo?: string, number?: number, projectUrl?: string}>} temporaryIdMap - Unified map of temporary IDs
-   * @param {Object} resolvedTemporaryIds - Plain object version of temporaryIdMap for backward compatibility
+   * @param {Object} resolvedTemporaryIds - Plain object map of temporary IDs to resolved values
    * @returns {Promise<Object>} Result with success/error status
    */
-  return async function handleCreateProject(message, temporaryIdMap, resolvedTemporaryIds = {}) {
+  return async function handleCreateProject(message, resolvedTemporaryIds = {}) {
     // Check max limit
     if (processedCount >= maxCount) {
       core.warning(`Skipping create_project: max count of ${maxCount} reached`);

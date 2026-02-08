@@ -515,7 +515,7 @@ describe("updateProject", () => {
     expect(result.draftItemId).toBe("draft-item-2");
     expect(getOutput("item-id")).toBe("draft-item-2");
     expect(getOutput("temporary-id")).toBe(temporaryId);
-    expect(mockCore.info).toHaveBeenCalledWith(`✓ Stored temporary_id mapping: ${temporaryId} -> draft-item-2`);
+    // Note: temporaryIdMap is no longer mutated by updateProject - the handler manager stores mappings based on return value
   });
 
   it("rejects draft issues without a title", async () => {
@@ -587,9 +587,8 @@ describe("updateProject", () => {
     expect(mockGithub.graphql.mock.calls.some(([query]) => query.includes("addProjectV2DraftIssue"))).toBe(true);
     expect(getOutput("item-id")).toBe("draft-item-temp");
     expect(getOutput("temporary-id")).toBe("aw_9f11121ed7df");
-    expect(temporaryIdMap.get("aw_9f11121ed7df")).toEqual({ draftItemId: "draft-item-temp" });
+    // Note: temporaryIdMap is no longer mutated by updateProject - the handler manager stores mappings based on return value
     expect(mockCore.info).toHaveBeenCalledWith('✓ Created new draft issue "Draft with temp ID"');
-    expect(mockCore.info).toHaveBeenCalledWith("✓ Stored temporary_id mapping: aw_9f11121ed7df -> draft-item-temp");
   });
 
   it("creates draft issue with temporary_id (with # prefix) and strips prefix", async () => {
@@ -608,8 +607,8 @@ describe("updateProject", () => {
     await updateProject(output, temporaryIdMap);
 
     expect(getOutput("temporary-id")).toBe("aw_abc123def456");
-    expect(temporaryIdMap.get("aw_abc123def456")).toEqual({ draftItemId: "draft-item-hash" });
-    expect(mockCore.info).toHaveBeenCalledWith("✓ Stored temporary_id mapping: aw_abc123def456 -> draft-item-hash");
+    // Note: temporaryIdMap is no longer mutated by updateProject - the handler manager stores mappings based on return value
+    expect(mockCore.info).toHaveBeenCalledWith('✓ Created new draft issue "Draft with hash prefix"');
   });
 
   it("updates draft issue via draft_issue_id using temporary ID map", async () => {
@@ -776,8 +775,8 @@ describe("updateProject", () => {
     expect(result).toBeDefined();
     expect(result.temporaryId).toBe("draft-1");
     expect(result.draftItemId).toBe("draft-item-friendly");
-    expect(temporaryIdMap.get("draft-1")).toEqual({ draftItemId: "draft-item-friendly" });
-    expect(mockCore.info).toHaveBeenCalledWith("✓ Stored temporary_id mapping: draft-1 -> draft-item-friendly");
+    // Note: temporaryIdMap is no longer mutated by updateProject - the handler manager stores mappings based on return value
+    expect(mockCore.info).toHaveBeenCalledWith('✓ Created new draft issue "User Friendly Draft"');
   });
 
   it("allows user-friendly draft_issue_id like 'draft-1' when updating draft", async () => {

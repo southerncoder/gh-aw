@@ -356,7 +356,7 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
 
   // Track messages that were deferred due to unresolved temporary IDs
   // These will be retried after the first pass when more temp IDs may be resolved
-  /** @type {Array<{type: string, message: any, messageIndex: number, handler: Function, isProjectHandler: boolean}>} */
+  /** @type {Array<{type: string, message: any, messageIndex: number, handler: Function}>} */
   const deferredMessages = [];
 
   core.info(`Processing ${sortedMessages.length} message(s) in topologically sorted order...`);
@@ -428,14 +428,10 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
       // Convert Map to plain object for handler - both handler types use the same unified map
       const resolvedTemporaryIds = Object.fromEntries(temporaryIdMap);
 
-      if (isProjectHandler) {
-        // Project handlers receive: (message, temporaryIdMap, resolvedTemporaryIds)
-        // Note: Project handlers already have the project Octokit bound during initialization
-        result = await messageHandler(message, temporaryIdMap, resolvedTemporaryIds);
-      } else {
-        // Regular handlers receive: (message, resolvedTemporaryIds)
-        result = await messageHandler(message, resolvedTemporaryIds);
-      }
+      // Both project and regular handlers receive: (message, resolvedTemporaryIds)
+      // Project handlers no longer need the Map directly - they read from resolvedTemporaryIds
+      // and return temporary ID mappings for the manager to store
+      result = await messageHandler(message, resolvedTemporaryIds);
 
       // Check if the handler explicitly returned a failure
       if (result && result.success === false && !result.deferred) {
@@ -458,7 +454,6 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
           message: message,
           messageIndex: i,
           handler: messageHandler,
-          isProjectHandler: isProjectHandler,
         });
         results.push({
           type: messageType,
@@ -576,14 +571,8 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
         const tempIdMapSizeBefore = temporaryIdMap.size;
 
         // Call the handler again with updated temp ID map
-        // Project handlers receive: (message, temporaryIdMap, resolvedTemporaryIds)
-        // Regular handlers receive: (message, resolvedTemporaryIds)
-        let result;
-        if (deferred.isProjectHandler) {
-          result = await deferred.handler(deferred.message, temporaryIdMap, resolvedTemporaryIds);
-        } else {
-          result = await deferred.handler(deferred.message, resolvedTemporaryIds);
-        }
+        // All handlers receive: (message, resolvedTemporaryIds)
+        const result = await deferred.handler(deferred.message, resolvedTemporaryIds);
 
         // Check if the handler explicitly returned a failure
         if (result && result.success === false && !result.deferred) {
