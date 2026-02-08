@@ -504,8 +504,8 @@ func TestValidatePluginSupportErrorMessage(t *testing.T) {
 	}
 
 	// Error should mention at least one supported engine (copilot, claude, or codex)
-	hasSupportedEngine := strings.Contains(errorMsg, "copilot") || 
-		strings.Contains(errorMsg, "claude") || 
+	hasSupportedEngine := strings.Contains(errorMsg, "copilot") ||
+		strings.Contains(errorMsg, "claude") ||
 		strings.Contains(errorMsg, "codex")
 	if !hasSupportedEngine {
 		t.Errorf("Error message should mention a supported engine, got: %s", errorMsg)
