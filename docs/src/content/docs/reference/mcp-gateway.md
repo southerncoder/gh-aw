@@ -301,6 +301,30 @@ Empty or malformed:
 
 **Compliance Test**: T-CFG-005 - Payload Directory Path Validation
 
+#### 4.1.3.2 Domain Format Requirements
+
+MCP Gateway domains must be valid DNS hostnames following these rules:
+
+- Start and end with alphanumeric characters (a-z, A-Z, 0-9)
+- May contain hyphens (-) in the middle
+- Each label (part between dots) must be 1-63 characters
+- No consecutive dots or trailing dots
+- No underscores or other special characters
+
+**Valid Examples:**
+- `api.example.com`
+- `localhost`
+- `mcp-server.internal`
+- `my-service.company.io`
+
+**Invalid Examples:**
+- `-invalid.com` (starts with hyphen)
+- `domain..com` (consecutive dots)
+- `under_score.com` (contains underscore)
+- `trailing-hyphen-.com` (ends with hyphen)
+
+**Note**: The gateway `domain` field currently restricts values to `localhost` or `host.docker.internal` (or variable expressions). These domain format requirements apply to other MCP-related configurations such as network allowed domains in MCP server configurations.
+
 #### 4.1.3a Top-Level Configuration Fields
 
 The following fields MAY be specified at the top level of the configuration:
