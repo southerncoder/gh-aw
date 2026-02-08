@@ -356,7 +356,7 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
 
   // Track messages that were deferred due to unresolved temporary IDs
   // These will be retried after the first pass when more temp IDs may be resolved
-  /** @type {Array<{type: string, message: any, messageIndex: number, handler: Function}>} */
+  /** @type {Array<{type: string, message: any, messageIndex: number, handler: Function, isProjectHandler: boolean}>} */
   const deferredMessages = [];
 
   core.info(`Processing ${sortedMessages.length} message(s) in topologically sorted order...`);
@@ -458,6 +458,7 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
           message: message,
           messageIndex: i,
           handler: messageHandler,
+          isProjectHandler: isProjectHandler,
         });
         results.push({
           type: messageType,
@@ -575,7 +576,14 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
         const tempIdMapSizeBefore = temporaryIdMap.size;
 
         // Call the handler again with updated temp ID map
-        const result = await deferred.handler(deferred.message, resolvedTemporaryIds);
+        // Project handlers receive: (message, temporaryIdMap, resolvedTemporaryIds)
+        // Regular handlers receive: (message, resolvedTemporaryIds)
+        let result;
+        if (deferred.isProjectHandler) {
+          result = await deferred.handler(deferred.message, temporaryIdMap, resolvedTemporaryIds);
+        } else {
+          result = await deferred.handler(deferred.message, resolvedTemporaryIds);
+        }
 
         // Check if the handler explicitly returned a failure
         if (result && result.success === false && !result.deferred) {
@@ -611,6 +619,24 @@ async function processMessages(messageHandlers, messages, projectOctokit = null)
               number: result.number,
             });
             core.info(`Registered temporary ID: ${result.temporaryId} -> ${result.repo}#${result.number}`);
+          }
+
+          // If this was a create_project during retry, store the project URL in the unified map
+          if (deferred.type === "create_project" && result && result.projectUrl && deferred.message.temporary_id) {
+            const normalizedTempId = normalizeTemporaryId(deferred.message.temporary_id);
+            temporaryIdMap.set(normalizedTempId, {
+              projectUrl: result.projectUrl,
+            });
+            core.info(`✓ Stored project mapping: ${deferred.message.temporary_id} -> ${result.projectUrl}`);
+          }
+
+          // If this was an update_project that created a draft issue during retry, store the draft item mapping
+          if (deferred.type === "update_project" && result && result.temporaryId && result.draftItemId) {
+            const normalizedTempId = normalizeTemporaryId(result.temporaryId);
+            temporaryIdMap.set(normalizedTempId, {
+              draftItemId: result.draftItemId,
+            });
+            core.info(`✓ Stored draft issue mapping: ${result.temporaryId} -> draft item ${result.draftItemId}`);
           }
 
           // Check if this output was created with unresolved temporary IDs
