@@ -34,4 +34,4 @@ test-results/
 playwright-report/
 screenshots/
 *.png
-!public/**/*.png
+!public/videos/*.png
