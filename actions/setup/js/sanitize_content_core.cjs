@@ -6,6 +6,8 @@
  * sanitize_content.cjs (full version) and sanitize_incoming_text.cjs (minimal version).
  */
 
+const { isRepoAllowed } = require("./repo_helpers.cjs");
+
 /**
  * Module-level set to collect redacted URL domains across sanitization calls.
  * @type {string[]}
@@ -508,13 +510,20 @@ function buildAllowedGitHubReferences() {
   }
 
   if (allowedRefsEnv === "") {
+    if (typeof core !== "undefined" && core.info) {
+      core.info("GitHub reference filtering: all references will be escaped (GH_AW_ALLOWED_GITHUB_REFS is empty)");
+    }
     return []; // Empty array means escape all references
   }
 
-  return allowedRefsEnv
+  const refs = allowedRefsEnv
     .split(",")
     .map(ref => ref.trim().toLowerCase())
     .filter(ref => ref);
+  if (typeof core !== "undefined" && core.info) {
+    core.info(`GitHub reference filtering: allowed repos = ${refs.join(", ")}`);
+  }
+  return refs;
 }
 
 /**
@@ -532,7 +541,8 @@ function getCurrentRepoSlug() {
 
 /**
  * Neutralizes GitHub references (#123 or owner/repo#456) by wrapping them in backticks
- * if they reference repositories not in the allowed list
+ * if they reference repositories not in the allowed list.
+ * Supports wildcard patterns (e.g., "myorg/*", "*") via isRepoAllowed().
  * @param {string} s - The string to process
  * @param {string[]|null} allowedRepos - List of allowed repository slugs (lowercase), or null to allow all
  * @returns {string} The string with unauthorized references neutralized
@@ -544,6 +554,9 @@ function neutralizeGitHubReferences(s, allowedRepos) {
   }
 
   const currentRepo = getCurrentRepoSlug();
+
+  // Expand the special "repo" keyword to the current repo slug and build a Set for isRepoAllowed()
+  const allowedSet = new Set(allowedRepos.map(r => (r === "repo" ? currentRepo : r)));
 
   // Match GitHub references:
   // - #123 (current repo reference)
@@ -561,13 +574,8 @@ function neutralizeGitHubReferences(s, allowedRepos) {
       targetRepo = currentRepo;
     }
 
-    // Check if "repo" is in allowed list (means current repo)
-    const allowCurrentRepo = allowedRepos.includes("repo");
-
-    // Check if this specific repo is in the allowed list
-    const isAllowed = allowedRepos.includes(targetRepo) || (allowCurrentRepo && targetRepo === currentRepo);
-
-    if (isAllowed) {
+    // Check if this repo is allowed using isRepoAllowed (supports wildcard patterns)
+    if (isRepoAllowed(targetRepo, allowedSet)) {
       return match; // Keep the original reference
     } else {
       // Escape the reference
