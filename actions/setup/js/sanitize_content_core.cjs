@@ -406,13 +406,35 @@ function convertXmlTags(s) {
 }
 
 /**
- * Neutralizes bot trigger phrases by wrapping them in backticks
- * @param {string} s - The string to process
- * @returns {string} The string with neutralized bot triggers
+ * Maximum number of bot trigger references allowed before filtering is applied.
  */
-function neutralizeBotTriggers(s) {
-  // Neutralize common bot trigger phrases like "fixes #123", "closes #asdfs", etc.
-  return s.replace(/\b(fixes?|closes?|resolves?|fix|close|resolve)\s+#(\w+)/gi, (match, action, ref) => `\`${action} #${ref}\``);
+const MAX_BOT_TRIGGER_REFERENCES = 10;
+
+/**
+ * Neutralizes bot trigger phrases by wrapping them in backticks.
+ * The first `maxBotMentions` unquoted trigger references are left unchanged;
+ * any occurrences beyond that threshold are wrapped in backticks.
+ * Already-quoted entries are never re-quoted.
+ * @param {string} s - The string to process
+ * @param {number} [maxBotMentions] - Number of occurrences to allow before escaping (default: MAX_BOT_TRIGGER_REFERENCES)
+ * @returns {string} The string with excess bot triggers neutralized
+ */
+function neutralizeBotTriggers(s, maxBotMentions = MAX_BOT_TRIGGER_REFERENCES) {
+  // Match unquoted bot trigger phrases like "fixes #123", "closes #asdfs", etc.
+  // The negative lookbehind (?<!`) skips already-quoted entries.
+  const pattern = /(?<!`)\b(fixes?|closes?|resolves?|fix|close|resolve)\s+#(\w+)/gi;
+  const matches = s.match(pattern);
+  if (!matches || matches.length <= maxBotMentions) {
+    return s;
+  }
+  let count = 0;
+  return s.replace(pattern, (match, action, ref) => {
+    count++;
+    if (count <= maxBotMentions) {
+      return match;
+    }
+    return `\`${action} #${ref}\``;
+  });
 }
 
 /**
@@ -717,9 +739,10 @@ function hardenUnicodeText(text) {
  * Core sanitization function without mention filtering
  * @param {string} content - The content to sanitize
  * @param {number} [maxLength] - Maximum length of content (default: 524288)
+ * @param {number} [maxBotMentions] - Max bot trigger references before filtering (default: MAX_BOT_TRIGGER_REFERENCES)
  * @returns {string} The sanitized content
  */
-function sanitizeContentCore(content, maxLength) {
+function sanitizeContentCore(content, maxLength, maxBotMentions) {
   if (!content || typeof content !== "string") {
     return "";
   }
@@ -768,7 +791,7 @@ function sanitizeContentCore(content, maxLength) {
   sanitized = neutralizeGitHubReferences(sanitized, allowedGitHubRefs);
 
   // Neutralize common bot trigger phrases
-  sanitized = neutralizeBotTriggers(sanitized);
+  sanitized = neutralizeBotTriggers(sanitized, maxBotMentions);
 
   // Neutralize template syntax delimiters (defense-in-depth)
   // This prevents potential issues if content is processed by downstream template engines
@@ -801,6 +824,7 @@ module.exports = {
   removeXmlComments,
   convertXmlTags,
   neutralizeBotTriggers,
+  MAX_BOT_TRIGGER_REFERENCES,
   neutralizeTemplateDelimiters,
   applyTruncation,
   hardenUnicodeText,
