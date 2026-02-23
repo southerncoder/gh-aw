@@ -3319,7 +3319,40 @@
               "description": "Short syntax: array of language identifiers to enable (e.g., [\"go\", \"typescript\"]). Note: rust does not generate a runtime setup step.",
               "items": {
                 "type": "string",
-                "enum": ["go", "typescript", "python", "java", "rust", "csharp"]
+                "enum": [
+                  "go",
+                  "typescript",
+                  "javascript",
+                  "python",
+                  "java",
+                  "rust",
+                  "csharp",
+                  "cpp",
+                  "c",
+                  "ruby",
+                  "php",
+                  "bash",
+                  "swift",
+                  "kotlin",
+                  "scala",
+                  "haskell",
+                  "elixir",
+                  "erlang",
+                  "clojure",
+                  "lua",
+                  "perl",
+                  "r",
+                  "dart",
+                  "julia",
+                  "fortran",
+                  "nix",
+                  "rego",
+                  "terraform",
+                  "yaml",
+                  "markdown",
+                  "zig",
+                  "elm"
+                ]
               }
             },
             {
