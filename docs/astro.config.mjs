@@ -208,6 +208,7 @@ export default defineConfig({
 					label: 'Reference',
 					items: [
 						{ label: 'AI Engines', link: '/reference/engines/' },
+						{ label: 'Assign to Copilot', link: '/reference/assign-to-copilot/' },
 						{ label: 'Authentication', link: '/reference/auth/' },
 						{ label: 'Authentication (Projects)', link: '/reference/auth-projects/' },
 						{ label: 'Cache Memory', link: '/reference/cache-memory/' },
@@ -225,6 +226,7 @@ export default defineConfig({
 						{ label: 'GH-AW Agent', link: '/reference/custom-agent-for-aw/' },
 						{ label: 'GH-AW as MCP Server', link: '/reference/gh-aw-as-mcp-server/' },
 						{ label: 'GitHub Lockdown Mode', link: '/reference/lockdown-mode/' },
+						{ label: 'GitHub Tools', link: '/reference/github-tools/' },
 						{ label: 'Glossary', link: '/reference/glossary/' },
 						{ label: 'Imports', link: '/reference/imports/' },
 						{ label: 'Markdown', link: '/reference/markdown/' },
