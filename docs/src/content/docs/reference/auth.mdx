@@ -85,16 +85,16 @@ Create a [fine-grained PAT](https://github.com/settings/personal-access-tokens/n
    gh aw secrets set COPILOT_GITHUB_TOKEN --value "<your-github-pat>"
    ```
 
-**Troubleshooting**:
-
-If your workflow fails at the Copilot inference step even with the token set, verify that the token owner's account has an active Copilot license. See [Copilot License or Inference Access Issues](/gh-aw/troubleshooting/common-issues/#copilot-license-or-inference-access-issues) for a local diagnostic step.
-
 <Video
   src="/gh-aw/videos/create-pat-user-copilot.mp4"
   caption="Creating a fine-grained PAT for user-owned repositories with Copilot permissions"
   aspectRatio="16:9"
   silenced={true}
 />
+
+**Troubleshooting**:
+
+If your workflow fails at the Copilot inference step even with the token set, verify that the token owner's account has an active Copilot license. See [Copilot License or Inference Access Issues](/gh-aw/troubleshooting/common-issues/#copilot-license-or-inference-access-issues) for a local diagnostic step.
 
 ---
 
@@ -112,7 +112,7 @@ If using the Claude by Anthropic engine, you need to set a GitHub Actions secret
    gh aw secrets set ANTHROPIC_API_KEY --value "YOUR_ANTHROPIC_API_KEY"
    ```
 
-See also (/gh-aw/reference/engines/#using-claude-by-anthropic-claude-code) for additional configuration needed when using Claude with GitHub MCP.
+See also [Using Claude Code](/gh-aw/reference/engines/#using-claude-by-anthropic-claude-code) for additional configuration needed when using Claude with GitHub MCP.
 
 ---
 
@@ -130,7 +130,7 @@ If using the Codex by OpenAI engine, you need to set a GitHub Actions secret `OP
    gh aw secrets set OPENAI_API_KEY --value "YOUR_OPENAI_API_KEY"
    ```
 
-See also (/gh-aw/reference/engines/#using-openai-codex) for additional configuration needed when using Codex with GitHub MCP.
+See also [Using Codex](/gh-aw/reference/engines/#using-openai-codex) for additional configuration needed when using Codex with GitHub MCP.
 
 ---
 
@@ -148,7 +148,7 @@ If using the Gemini by Google engine, you need to set a GitHub Actions secret `G
    gh aw secrets set GEMINI_API_KEY --value "YOUR_GEMINI_API_KEY"
    ```
 
-See also (/gh-aw/reference/engines/#using-google-gemini-cli) for additional configuration needed when using Gemini with GitHub MCP.
+See also [Using Gemini](/gh-aw/reference/engines/#using-google-gemini-cli) for additional configuration needed when using Gemini with GitHub MCP.
 
 ---
 
